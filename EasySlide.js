@@ -170,9 +170,11 @@
     this.slides = [];
     this.slidesLen = 0;
     this.curIndex = 0;
+
     this.curGroups = [];
     this.curGLen = 0;
     this.curGIndex = 0;
+
     this.subppt = [];
     this.subpptNum = []; //哪些slide是有左右滑动的子ppt的
     this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
@@ -249,10 +251,7 @@
     initWeiXin: function() {
       var self = this;
       this.shareWeiboBtn = utils.$(this.shareWeiboBtn);
-      utils.bind(this.shareWeiboBtn, "click", function(e) {
-        self.shareWeibo();
-        e.stopPropagation();
-      });
+      utils.bind(this.shareWeiboBtn, "click", this.shareWeibo.bind(this));
       this.shareCircleBtn = utils.$(this.shareCircleBtn);
       if (utils.isWeixn()) { //如果是微信，显示分享到微信按钮
         this.sharewxbg = utils.$(this.sharewxbg);
@@ -364,29 +363,21 @@
     allowSwipeY: function() {
       //获得该针是否允许上下滑动
       var allowswipe = utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
-      if (this.lastY < this.startY) {
-        if (!allowswipe || allowswipe === "next") {
-          this.move('next');
-        }
-      } else {
-        if (!allowswipe || allowswipe === "prev") {
-          this.move('prev');
-        }
+      var direction = this.lastY < this.startY ? 1 : -1;
+      if (!allowswipe || allowswipe === "next" || allowswipe === 'prev') {
+        this.move(direction);
       }
     },
     allowSwipeX: function() {
       var subindex = this.subpptNum.indexOf(this.curIndex);
       if (subindex !== -1) { //如果此页有子ppt
-        if (this.lastX < this.startX) {
-          this.subppt[subindex].move(1);
-        } else {
-          this.subppt[subindex].move(-1);
-        }
+        var direction = this.lastX < this.startX ? 1 : -1;
+        this.subppt[subindex].move(direction);
       }
     },
     move: function(direction) {
       var directions = {
-        next: function() {
+        '1': function() {
           if (this.curGIndex < this.curGLen - 1) {
             this.curGIndex++;
           } else {
@@ -402,7 +393,7 @@
             this.curGIndex = 0;
           }
         },
-        prev: function() {
+        '-1': function() {
           if (this.curGIndex > 0) {
             this.curGIndex--;
           } else {
@@ -457,10 +448,11 @@
       this.curGIndex = 0;
       this.showCurSlide();
     },
-    shareWeibo: function() {
+    shareWeibo: function(e) {
       var wbTitle = doc.title;
       var shareImg = this.shareImg;
       var weiboreg = /weibo/i;
+      e.stopPropagation();
       if (weiboreg.test(UA)) {
         /*
         WeiboJSBridge.invoke("openMenu", {}, function(params, success, code) {
