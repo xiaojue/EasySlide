@@ -9,8 +9,6 @@
 
   var UA = navigator.userAgent;
 
-  function noop() {}
-
   var utils = {
     $: function(id) {
       return doc.getElementById(id);
@@ -66,6 +64,9 @@
     show: function(ele, flg) {
       ele.style.display = flg ? '' : 'block';
     },
+    hasAttr: function(ele, key) {
+      return ele.getAttribute(key) !== null;
+    },
     contain: function(ele, cls) {
       while (ele && ele.parentNode) {
         if (utils.hasClass(ele, cls)) {
@@ -78,8 +79,19 @@
     hasClass: function(ele, cls) {
       return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
     },
-    isWeixn: function() {
+    isWeixin: function() {
       return UA.toLowerCase().match(/MicroMessenger/i) === "micromessenger" ? true : false;
+    },
+    shareWeibo: function(params) {
+      var wbTitle = doc.title || params.title;
+      var shareImg = params.shareImg || '';
+      var weiboreg = /weibo/i;
+      if (weiboreg.test(UA)) {
+        win.WeiboJSBridge.invoke("openMenu", {}, function() {});
+      } else {
+        //wb_title为微博分享文案，share_img为分享图
+        doc.location.href = 'http://share.sina.cn/callback?vt=4&title=' + encodeURIComponent(wbTitle) + '&pic=' + encodeURIComponent(shareImg) + '&url=' + encodeURIComponent(document.location.href);
+      }
     },
     mixin: function(sup, obj) {
       for (var i in obj) {
@@ -118,12 +130,23 @@
     this.startY = 0;
     this.lastX = 0;
     this.lastY = 0;
+    this.isScrollMoving = false;
+    this.scrollEle = null;
     Events.call(this);
     this.bindSwipe(ele);
   };
 
   swipeEvent.prototype = {
     constructor: swipeEvent,
+    isScrollContain: function(ele) {
+      while (ele && ele.parentNode) {
+        if(utils.hasAttr(ele,'scroll')){
+          return ele;
+        }
+        ele = ele.parentNode;
+      }
+      return null;
+    },
     bindSwipe: function(ele) {
       utils.bind(ele, "touchstart", this._touchstart.bind(this));
       utils.bind(ele, "touchmove", this._touchmove.bind(this));
@@ -134,11 +157,18 @@
         //这里只允许单指操作
         return false;
       }
+      this.scrollEle = null;
       this.startX = this.lastX = e.touches[0].pageX;
       this.startY = this.lastY = e.touches[0].pageY;
     },
     _touchmove: function(e) {
+      var scrollEle = this.isScrollContain(e.target);
+      if (scrollEle) {
+        this.scrollEle = scrollEle;
+        return false;
+      }
       e.preventDefault();
+
       if (e.touches && e.touches.length > 1) {
         return false;
       }
@@ -146,6 +176,18 @@
       this.lastY = e.touches[0].pageY;
     },
     _touchend: function() {
+      if (this.scrollEle) {
+        var scrollTop = this.scrollEle.scrollTop;
+        var eleH = this.scrollEle.clientHeight;
+        var scrollH = this.scrollEle.scrollHeight;
+        if(eleH + scrollTop + 10 >= scrollH){
+          this.trigger('swipeY', [1]);
+        }else if(scrollTop < 10){
+          this.trigger('swipeY', [-1]);
+        }
+        return false;
+      }
+
       var absX = Math.abs(this.lastX - this.startX);
       var absY = Math.abs(this.lastY - this.startY);
 
@@ -156,9 +198,9 @@
       }
 
       if (dragDirec === "y") {
-        this.trigger('swipeY');
+        this.trigger('swipeY', [this.lastY < this.startY ? 1 : -1]);
       } else if (dragDirec === "x") {
-        this.trigger('swipeX');
+        this.trigger('swipeX', [this.lastX < this.startX ? 1 : -1]);
       }
     }
   };
@@ -180,15 +222,8 @@
     this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
 
     var defaultConfig = {
-      resourceImg: [],
-      resourceFoldUrl: '',
-      loading: '',
-      loadingWrap: '',
-      wrapAll: '',
-      arrow: '',
-      shareWeiboBtn: '',
-      shareCircleBtn: '',
-      sharewxbg: ''
+      replay:false,
+      wrapAll: ''
     };
 
     utils.mixin(defaultConfig, config);
@@ -200,11 +235,11 @@
   };
 
   EasySlide.STATIC = {
-    flayerCls: 'flayer',
-    flayerBtnCls: 'flayerbtn',
-    flayerTriggerCls: 'triggerLayer',
-    groupCls: 'groups',
-    slideCls: 'slides'
+    flayerCls: 'EasySlide-flayer',
+    flayerTriggerCls: 'EasySlide-triggerLayer',
+    animateCls: 'EasySlide-animate',
+    groupCls: 'EasySlide-groups',
+    slideCls: 'EasySlide-slides'
   };
 
   EasySlide.prototype = {
@@ -233,10 +268,6 @@
         }
       });
     },
-    initLoading: function() {
-      this.loading = utils.$(this.loading);
-      this.loadingWrap = utils.$(this.loadingWrap);
-    },
     bindEvent: function() {
       utils.bind(this.wrapAll, "click", this._click.bind(this));
       //绑在touchend上，操作才灵敏
@@ -248,27 +279,7 @@
         e.preventDefault();
       });
     },
-    initWeiXin: function() {
-      var self = this;
-      this.shareWeiboBtn = utils.$(this.shareWeiboBtn);
-      utils.bind(this.shareWeiboBtn, "click", this.shareWeibo.bind(this));
-      this.shareCircleBtn = utils.$(this.shareCircleBtn);
-      if (utils.isWeixn()) { //如果是微信，显示分享到微信按钮
-        this.sharewxbg = utils.$(this.sharewxbg);
-        utils.bind(this.shareCircleBtn, "click", function() {
-          utils.show(self.sharewxbg);
-        });
-        utils.bind(this.sharewxbg, "click", function() {
-          utils.hide(self.sharewxbg);
-        });
-      } else {
-        utils.remove(this.shareCircleBtn);
-      }
-    },
     init: function() {
-
-      this.initLoading();
-      this.retrieve();
 
       this.initSlides(this.wrapAll);
 
@@ -276,11 +287,9 @@
       this.slidesLen = this.slides.length;
       this.curGroups = utils.getByClsName(EasySlide.STATIC.groupCls, this.slides[0]);
       this.curGLen = this.curGroups.length;
-      this.arrow = utils.$(this.arrow);
       this.showCurSlide();
 
       this.bindEvent();
-      this.initWeiXin();
 
       if (this.subpptObjects) {
         this.initSubPPT(this.subpptObjects);
@@ -300,6 +309,10 @@
     setYPos: function(el, posY) { //设置slide的竖直方向位置
       el.style["-webkit-transform"] = "translate3d(0," + posY + "px,0)";
     },
+    removeAnimation: function(el) {
+      el.style['-webkit-animation'] = "";
+      el.offsetWidth = el.offsetWidth;
+    },
     setAnimation: function(el, animation) {
       el.style["-webkit-animation"] = animation.name + " " + animation.duration + " " + animation.tfunction + " " + animation.delay + " " + animation.iteration + " normal forwards";
     },
@@ -307,6 +320,7 @@
       var self = this;
       var attr = utils.attr;
       this.slides.forEach(function(slide) {
+
 
         var tIndex = parseInt(utils.attr(slide, "index"), 10);
         var isEnd = self.curIndex === self.slidesLen - 1 && tIndex === 0;
@@ -337,7 +351,10 @@
         //处理当前slide下面的groups的展示
         if (tIndex === self.curGIndex) {
           utils.show(group);
-          var animateDivs = utils.getByClsName("animate", group);
+          var animateDivs = utils.getByClsName(EasySlide.STATIC.animateCls, group);
+          if(self.replay){
+            animateDivs.forEach(self.removeAnimation);
+          }
           animateDivs.forEach(function(div) {
             self.setAnimation(div, {
               name: attr(div, "in"),
@@ -352,26 +369,19 @@
           utils.hide(group);
         }
       });
-
       var allowswipe = utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
-      if (allowswipe === "no" || allowswipe === "prev") {
-        utils.hide(this.arrow);
-      } else {
-        utils.show(this.arrow, true);
-      }
+      this.trigger('slide-switchEnd', [allowswipe]);
     },
-    allowSwipeY: function() {
+    allowSwipeY: function(direction) {
       //获得该针是否允许上下滑动
       var allowswipe = utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
-      var direction = this.lastY < this.startY ? 1 : -1;
       if (!allowswipe || allowswipe === "next" || allowswipe === 'prev') {
         this.move(direction);
       }
     },
-    allowSwipeX: function() {
+    allowSwipeX: function(direction) {
       var subindex = this.subpptNum.indexOf(this.curIndex);
       if (subindex !== -1) { //如果此页有子ppt
-        var direction = this.lastX < this.startX ? 1 : -1;
         this.subppt[subindex].move(direction);
       }
     },
@@ -418,13 +428,13 @@
       //处理各种逻辑，包括跳转、出浮层、浮层消失等
       var target = e.target;
       while (target && target.parentNode && target !== this.wrapAll) {
-        if (utils.hasClass(target, "goto")) {
+        if (utils.hasAttr(target, "goto")) {
           //所有的大frame之间的跳转
           e.stopPropagation();
           var tGoIndex = parseInt(utils.attr(target, "goto"), 10);
           this.goto(tGoIndex);
           break;
-        } else if (utils.hasClass(target, EasySlide.STATIC.flayerBtnCls)) {
+        } else if (utils.hasAttr(target, 'layerid')) {
           //所有点击出浮层
           e.stopPropagation();
           var tLayer = utils.$(utils.attr(target, "layerid"));
@@ -433,7 +443,7 @@
         } else if (utils.hasClass(target, EasySlide.STATIC.flayerCls)) {
           //浮层点击消失
           e.stopPropagation();
-          utils.show(target, true);
+          utils.hide(target);
           break;
         }
         target = target.parentNode;
@@ -448,55 +458,23 @@
       this.curGIndex = 0;
       this.showCurSlide();
     },
-    shareWeibo: function(e) {
-      var wbTitle = doc.title;
-      var shareImg = this.shareImg;
-      var weiboreg = /weibo/i;
-      e.stopPropagation();
-      if (weiboreg.test(UA)) {
-        /*
-        WeiboJSBridge.invoke("openMenu", {}, function(params, success, code) {
-          if (success) {
-          } else {
-            if (code === WeiboJSBridge.STATUS_CODE.NO_RESULT) {
-              // do something.
-            }
-          }
-        });
-        */
-        win.WeiboJSBridge.invoke("openMenu", {}, noop);
-      } else {
-        //wb_title为微博分享文案，share_img为分享图
-        doc.location.href = 'http://share.sina.cn/callback?vt=4&title=' + encodeURIComponent(wbTitle) + '&pic=' + encodeURIComponent(shareImg) + '&url=' + encodeURIComponent(document.location.href);
-      }
-    },
-    retrieve: function() {
+    loader: function(resource) {
       //加载资源loading界面
-      var resourceImg = this.resourceImg,
+      var self = this,
         timg = [],
-        successCount = 0,
-        self = this,
-        foldurl = this.resourceFoldUrl,
-        resourceLen = resourceImg.length;
-      resourceImg.forEach(function(img, index) {
+        resourceLen = resource.length,
+        successCount = 0;
+      resource.forEach(function(src, index) {
         timg[index] = new Image();
         timg[index].onload = timg[index].onerror = function() {
-          self.loading.innerHTML = (successCount / resourceLen * 100).toFixed(2) + "%";
+          successCount++;
+          self.trigger('progress', [(successCount / resourceLen * 100).toFixed(2)]);
           if (successCount === resourceLen) {
-            self.hideloading();
+            self.trigger('loaded');
           }
         };
-        successCount++;
-        timg[index].src = foldurl + img;
+        timg[index].src = src;
       });
-    },
-    hideloading: function() {
-      //隐藏loading
-      var self = this;
-      this.setYPos(this.loadingWrap, -this.vH);
-      setTimeout(function() {
-        utils.hide(self.loadingWrap);
-      }, 500);
     }
   };
 
@@ -535,9 +513,10 @@
     },
     resize: function() {
       this.initSlides(this.wrapDiv);
+      var floorvW = this.floorvW.bind(this);
       var slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
       slides.forEach(function(slide) {
-        slide.style.width = Math.floor(this.vW * 0.6) + "px";
+        slide.style.width = floorvW(0.6) + "px";
       });
       this.showCurSlide();
     },
@@ -554,7 +533,7 @@
       var tDiv = doc.createElement("div");
       tDiv.className = Subppt.STATIC.slideCls;
       utils.attr(tDiv, "subindex", index);
-      tDiv.style.width = Math.floor(this.vW * 0.6) + "px";
+      tDiv.style.width = this.floorvW(0.6) + "px";
       tDiv.innerHTML = "<div class='" + Subppt.STATIC.imgWrapCls + "'><img src='" + this.imgs[index] + "' /></div></div>";
       this.wrapDiv.appendChild(tDiv);
       return tDiv;
@@ -566,8 +545,12 @@
         span.className = i === self.curIndex ? "on" : "";
       });
     },
+    floorvW: function(num) {
+      return Math.floor(this.vW * num);
+    },
     showCurSlide: function() {
       var self = this,
+        floorvW = self.floorvW.bind(this),
         tDiv,
         hasPrev1 = false,
         hasPrev2 = false,
@@ -576,11 +559,9 @@
         hasNext2 = false,
         slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
 
-      function floorvW(num) {
-        return Math.floor(self.vW * num);
-      }
-
       slides.forEach(function(slide) {
+      
+
         var tIndex = parseInt(utils.attr(slide, "subindex"), 10);
         var isCur = tIndex === this.curIndex;
         var last1 = this.slidesLen - 1;
