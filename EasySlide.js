@@ -65,7 +65,7 @@
       ele.style.display = flg ? '' : 'block';
     },
     hasAttr: function(ele, key) {
-      return ele.getAttribute(key) !== null;
+      return ele.hasAttribute(key);
     },
     contain: function(ele, cls) {
       while (ele && ele.parentNode) {
