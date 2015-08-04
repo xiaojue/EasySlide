@@ -319,8 +319,8 @@
     showCurSlide: function() {
       var self = this;
       var attr = utils.attr;
-      this.slides.forEach(function(slide) {
 
+      this.slides.forEach(function(slide) {
 
         var tIndex = parseInt(utils.attr(slide, "index"), 10);
         var isEnd = self.curIndex === self.slidesLen - 1 && tIndex === 0;
@@ -559,20 +559,24 @@
         hasNext2 = false,
         slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
 
+        var last1 = this.slidesLen - 1;
+        var last2 = this.slidesLen - 2;
+        var next1 = this.curIndex + 1;
+        var next2 = this.curIndex + 2;
+        var prev1 = this.curIndex - 1;
+        var prev2 = this.curIndex - 2;
+
       slides.forEach(function(slide) {
-      
 
         var tIndex = parseInt(utils.attr(slide, "subindex"), 10);
         var isCur = tIndex === this.curIndex;
-        var last1 = this.slidesLen - 1;
-        var last2 = this.slidesLen - 2;
-        var isNext = tIndex === this.curIndex + 1;
+        var isNext = tIndex === next1;
         var isLast = (this.curIndex === last1 && tIndex === 0);
-        var isNext2 = tIndex === this.curIndex + 2;
+        var isNext2 = tIndex === next2;
         var isNextLast2 = (this.curIndex === last1 && tIndex === 1) || (this.curIndex === last2 && tIndex === 0);
-        var isPrev = tIndex === this.curIndex - 1;
+        var isPrev = tIndex === prev1;
         var isFirst = (this.curIndex === 0 && tIndex === last1);
-        var isPrev2 = tIndex === this.curIndex - 2;
+        var isPrev2 = tIndex === prev2;
         var isPrevFirst2 = (this.curIndex === 0 && tIndex === last2) || (this.curIndex === 1 && tIndex === last1);
 
         var posArgs = [];
@@ -608,17 +612,17 @@
         this.setPos(tDiv, floorvW(0.2));
       }
       if (!hasNext1) {
-        if (this.curIndex < this.slidesLen - 1) {
-          tDiv = this.createSlide(this.curIndex + 1);
+        if (this.curIndex < last1) {
+          tDiv = this.createSlide(next1);
         } else {
           tDiv = this.createSlide(0);
         }
         this.setPos(tDiv, floorvW(0.9), floorvW(0.05), 0.8);
       }
       if (!hasNext2) {
-        if (this.curIndex < this.slidesLen - 2) {
-          tDiv = this.createSlide(this.curIndex + 2);
-        } else if (this.curIndex === this.slidesLen - 2) {
+        if (this.curIndex < last2) {
+          tDiv = this.createSlide(next2);
+        } else if (this.curIndex === last2) {
           tDiv = this.createSlide(0);
         } else {
           tDiv = this.createSlide(1);
@@ -627,19 +631,19 @@
       }
       if (!hasPrev1) {
         if (this.curIndex > 0) {
-          tDiv = this.createSlide(this.curIndex - 1);
+          tDiv = this.createSlide(prev1);
         } else {
-          tDiv = this.createSlide(this.slidesLen - 1);
+          tDiv = this.createSlide(last1);
         }
         this.setPos(tDiv, -floorvW(0.38), floorvW(0.05), 0.8);
       }
       if (!hasPrev2) {
         if (this.curIndex > 1) {
-          tDiv = this.createSlide(this.curIndex - 2);
+          tDiv = this.createSlide(prev2);
         } else if (this.curIndex === 1) {
-          tDiv = this.createSlide(this.slidesLen - 1);
+          tDiv = this.createSlide(last1);
         } else {
-          tDiv = this.createSlide(this.slidesLen - 2);
+          tDiv = this.createSlide(last2);
         }
         this.setPos(tDiv, (-this.vW - 150), floorvW(0.1), 0.7);
       }
