@@ -61,8 +61,8 @@
     hide: function(ele) {
       ele.style.display = 'none';
     },
-    show: function(ele, flg) {
-      ele.style.display = flg ? '' : 'block';
+    show: function(ele) {
+      ele.style.display = 'block';
     },
     hasAttr: function(ele, key) {
       return ele.hasAttribute(key);
@@ -336,14 +336,14 @@
           y = -self.vH;
         }
 
+
         if (isCur || isNext || isPrev || isEnd || isFirst) {
           self.setYPos(slide, y);
-          utils.show(slide, true);
+          utils.show(slide);
         } else {
-          //动画做完再隐藏
           utils.hide(slide);
-          //多余的slide隐藏，这样始终保持最多3张显示
         }
+        
       });
 
       this.curGroups.forEach(function(group) {
