@@ -14,6 +14,8 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 
 ![EasySlide](demo/images/demo.gif)
 
+![EasySlide](demo/images/yoga.gif)
+
 ### 快速上手
 
 首先需要引用对应的css和javascript，和要求的HTML结构，本框架只支持移动端，更多API见参考文档。
