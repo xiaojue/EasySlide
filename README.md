@@ -165,28 +165,68 @@ SubpptObjects:[{
 -----
 
 #### animate参数配置
-
+```
+设置为class="EasySlide-animate"的节点，都可以配置如下参数
+```
 -----
 
 ##### in
+```
+默认自带得animate效果有zoomIn,fadeIn,fadeInDown,fadeInUp,pulse
+可在EasySlide.css中找到，也可以自己增加。
+```
 ##### delay
+```
+设置动画开始延迟时间 delay=".5s"
+```
 ##### duration
+```
+设置动画总时间 duration="1s"
+```
 ##### tfunction
+```
+设置动画的timing-function，默认ease
+```
 ##### iteration
-
+```
+设置动画的iteration,默认是 1
+```
 -----
 
+#### slide参数配置
+```
+设置为class="EasySlide-slides"下的子节点都可以配置如下参数
+```
 ##### index
+```
+slide所属顺序
+```
 ##### gindex
+```
+group所属顺序
+```
 ##### layerid
+```
+点击某节点后弹出浮层的浮层id,对应用法需要在点击节点上设置flayerTriggerCls
+```
 ##### scroll
+```
+当前层是否为带scroll y的节点，设置后，滚动条可用，如demo。
+```
 ##### goto
+```
+点击节点后跳转至对应slide goto="3"
+```
 ##### allowswipe
-
+```
+当前slide是否允许被滑动，可设置next和prev，不设置为上下均可滑动。
+```
 -----
 
 ##### EasySlide.STATIC
-
+```
+默认的EasySlide className储存位置，如果想自定义可以修改。
+```
 ##### EasySlide.STATIC.flayerCls
 ##### EasySlide.STATIC.flayerTriggerCls
 ##### EasySlide.STATIC.animateCls
@@ -196,7 +236,9 @@ SubpptObjects:[{
 -----
 
 ##### EasySlide.Subppt.STATIC
-
+```
+默认的EasySlide subppt className储存位置，如果想自定义可以修改。
+```
 -----
 
 ##### EasySlide.Subppt.STATIC.slideCls
@@ -205,7 +247,9 @@ SubpptObjects:[{
 -----
 
 ##### EasySlide.utils 
-
+```
+一些常见的工具方法
+```
 -----
 
 ##### EasySlide.utils.$
