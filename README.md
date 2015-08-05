@@ -67,139 +67,134 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 
 ### API
 
-EasySlide.utils 
-
-工具方法：
+##### EasySlide.utils 
 
 -----
 
-EasySlide.utils.$
+##### EasySlide.utils.$
 
 id选择器
 
-EasySlide.utils.getByTagName
+##### EasySlide.utils.getByTagName
 
 Tag选择器
 
-
-EasySlide.utils.getByClsName
+##### EasySlide.utils.getByClsName
 
 ClassName选择器
 
-
-EasySlide.utils.makeElesArray
+##### EasySlide.utils.makeElesArray
 
 把类数组元素转换成数组元素
 
-
-EasySlide.utils.attr
+##### EasySlide.utils.attr
 
 或者和设置属性方法
 
-EasySlide.utils.bind
+##### EasySlide.utils.bind
 
 绑定DOM事件
 
-EasySlide.utils.unbind
+##### EasySlide.utils.unbind
 
 解绑DOM事件
 
-EasySlide.utils.viewDate
+##### EasySlide.utils.viewDate
 
 获取窗口视图信息
 
-EasySlide.utils.remove
+##### EasySlide.utils.remove
 
 删除DOM元素
 
-EasySlide.utils.hide
+##### EasySlide.utils.hide
 
 隐藏DOM元素
 
-EasySlide.utils.show
+##### EasySlide.utils.show
 
 显示DOM元素
 
-EasySlide.utils.hasAttr
+##### EasySlide.utils.hasAttr
 
 查看DOM元素是否有自定义属性
 
-EasySlide.utils.contain
+##### EasySlide.utils.contain
 
 查看是否包含对应className的元素
 
-EasySlide.utils.isWeixin
+##### EasySlide.utils.isWeixin
 
 检查是否是微信浏览器
 
-EasySlide.utils.hasClass
+##### EasySlide.utils.hasClass
 
 检查是否包含对应cls
 
-EasySlide.utils.shareWeibo
+##### EasySlide.utils.shareWeibo
 
 分享到微博
 
-EasySlide.utils.mixin
+##### EasySlide.utils.mixin
 
 属性拷贝方法
 
 -----
 
-EasySlide.STATIC
+##### EasySlide.STATIC
 
-EasySlide.STATIC.flayerCls
-EasySlide.STATIC.flayerTriggerCls
-EasySlide.STATIC.animateCls
-EasySlide.STATIC.groupCls
-EasySlide.STATIC.slideCls
-
------
-
-EasySlide.Subppt.STATIC
-
-EasySlide.Subppt.STATIC.slideCls
-EasySlide.Subppt.STATIC.imgWrapCls
+##### EasySlide.STATIC.flayerCls
+##### EasySlide.STATIC.flayerTriggerCls
+##### EasySlide.STATIC.animateCls
+##### EasySlide.STATIC.groupCls
+##### EasySlide.STATIC.slideCls
 
 -----
 
-EasySlide
+##### EasySlide.Subppt.STATIC
+
+##### EasySlide.Subppt.STATIC.slideCls
+##### EasySlide.Subppt.STATIC.imgWrapCls
+
+-----
+
+##### EasySlide
 
 方法
 
-loader
-goto
-move
+##### loader
+#####goto
+##### move
 
 事件
 
-progress
-loaded
-swipeY
-swipeX
-slide-switchEnd
-ppt-switchEnd
+##### progress
+##### loaded
+##### swipeY
+##### swipeX
+##### slide-switchEnd
+##### ppt-switchEnd
 
 初始化参数配置
 
-wrapAll
-SubpptObjects
-replay
+##### wrapAll
+##### SubpptObjects
+##### replay
 
 animate参数配置
 
-in
-delay
-duration
-tfunction
-iteration
+##### in
+##### delay
+##### duration
+##### tfunction
+##### iteration
 
-index
-gindex
-layerid
-scroll
-goto
-allowswipe
+##### index
+##### gindex
+##### layerid
+##### scroll
+##### goto
+##### allowswipe
 
 -----
 
