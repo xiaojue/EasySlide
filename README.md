@@ -2,8 +2,6 @@
 
 Easy to build a mobile page slide.
 
-EN Document TODO
-
 ----
 
 ### About
