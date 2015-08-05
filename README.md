@@ -35,7 +35,7 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
            </div>
            <div index="1" class="Easyslide-slides">
                <div gindex="0" class="EasySlide-groups">
-                  <h1 class="EasySlide-animate" in="zoomIn" duration="1s" delay=".5s"></h1> <!-- 每个groups里的元素都可以通过EasySlide-animte来标记，在dom节点上直接做动画操作 -->
+                  <h1 class="EasySlide-animate" in="zoomIn" duration="1s" delay=".5s">Title</h1> <!-- 每个groups里的元素都可以通过EasySlide-animte来标记，在dom节点上直接做动画操作 -->
                </div>
            </div>
        </div>
