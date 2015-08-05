@@ -19,7 +19,7 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 ![EasySlide](demo/images/yoga.gif)
 
 ```
-gif图片较大，耐心等待刷出~
+gif图片较大，耐心等待刷出~，gif有丢帧，详细请clone本项目，打开demo文件夹查看，本地可运行。
 ```
 
 ### 快速上手
