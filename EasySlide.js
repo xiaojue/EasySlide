@@ -498,10 +498,6 @@
       this.imgs = obj.imgs;
       this.slidesLen = this.imgs.length;
       this.initSlides(this.wrapDiv);
-      this.dotsWrap = utils.$(obj.dotsWrap);
-      if (this.dotsWrap) {
-        this.createDots();
-      }
       utils.bind(win, "resize", this.resize.bind(this));
       this.showCurSlide();
     },
