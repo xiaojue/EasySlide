@@ -153,6 +153,8 @@ ClassName选择器
 
 ##### EasySlide.Subppt.STATIC
 
+-----
+
 ##### EasySlide.Subppt.STATIC.slideCls
 ##### EasySlide.Subppt.STATIC.imgWrapCls
 
@@ -160,13 +162,21 @@ ClassName选择器
 
 ##### EasySlide
 
+-----
+
 #### 方法
+
+-----
 
 ##### loader
 #####goto
 ##### move
 
+-----
+
 #### 事件
+
+-----
 
 ##### progress
 ##### loaded
@@ -175,19 +185,29 @@ ClassName选择器
 ##### slide-switchEnd
 ##### ppt-switchEnd
 
+-----
+
 #### 初始化参数配置
+
+-----
 
 ##### wrapAll
 ##### SubpptObjects
 ##### replay
 
+-----
+
 #### animate参数配置
+
+-----
 
 ##### in
 ##### delay
 ##### duration
 ##### tfunction
 ##### iteration
+
+-----
 
 ##### index
 ##### gindex
