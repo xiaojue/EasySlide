@@ -552,25 +552,27 @@
     showCurSlide: function() {
       var self = this,
         floorvW = self.floorvW.bind(this),
-        tDiv,
-        hasCur = false,
-        hasPrev1 = false,
-        hasPrev2 = false,
-        hasNext1 = false,
-        hasNext2 = false,
-        hasCurEffect = [floorvW(0.2)], 
+        hasCurEffect = [floorvW(0.2)],
         hasNext1Effect = [floorvW(0.9), floorvW(0.05), 0.8],
-        hasNext2Effect= [self.vW + 150, floorvW(0.1), 0.7],
+        hasNext2Effect = [self.vW + 150, floorvW(0.1), 0.7],
         hasPrev1Effect = [-floorvW(0.38), floorvW(0.05), 0.8],
         hasPrev2Effect = [-self.vW - 150, floorvW(0.1), 0.7],
         slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
 
-        var last1 = this.slidesLen - 1;
-        var last2 = this.slidesLen - 2;
-        var next1 = this.curIndex + 1;
-        var next2 = this.curIndex + 2;
-        var prev1 = this.curIndex - 1;
-        var prev2 = this.curIndex - 2;
+      var last1 = this.slidesLen - 1;
+      var last2 = this.slidesLen - 2;
+      var next1 = this.curIndex + 1;
+      var next2 = this.curIndex + 2;
+      var prev1 = this.curIndex - 1;
+      var prev2 = this.curIndex - 2;
+
+      var states = {
+        hasCur: false,
+        hasPrev1: false,
+        hasPrev2: false,
+        hasNext1: false,
+        hasNext2: false
+      };
 
       slides.forEach(function(slide) {
 
@@ -585,81 +587,112 @@
         var isPrev2 = tIndex === prev2;
         var isPrevFirst2 = (this.curIndex === 0 && tIndex === last2) || (this.curIndex === 1 && tIndex === last1);
 
-        var posArgs = [];
-
-        if (isCur) {
-          hasCur = true;
-          posArgs = hasCurEffect;
-        } else if (isNext || isLast) {
-          hasNext1 = true;
-          posArgs = hasNext1Effect;
-        } else if (isNext2 || isNextLast2) {
-          hasNext2 = true;
-          posArgs = hasNext2Effect;
-        } else if (isPrev || isFirst) {
-          hasPrev1 = true;
-          posArgs = hasPrev1Effect;
-        } else if (isPrev2 || isPrevFirst2) {
-          hasPrev2 = true;
-          posArgs = hasPrev2Effect;
-        } else {
-          utils.remove(slide);
+        function setState(states) {
+          var posArgs = [];
+          for (var state in states) {
+            if (states[state] === true) {
+              switch (state) {
+                case 'hasCur':
+                  posArgs = [slide].concat(hasCurEffect);
+                  break;
+                case 'hasNext1':
+                  posArgs = [slide].concat(hasNext1Effect);
+                  break;
+                case 'hasNext2':
+                  posArgs = [slide].concat(hasNext2Effect);
+                  break;
+                case 'hasPrev1':
+                  posArgs = [slide].concat(hasPrev1Effect);
+                  break;
+                case 'hasPrev2':
+                  posArgs = [slide].concat(hasPrev2Effect);
+                  break;
+              }
+              break;
+            }
+          }
+          self.setPos.apply(self, posArgs);
         }
 
-        if (posArgs.length) {
-          posArgs.unshift(slide);
-          this.setPos.apply(this, posArgs);
-        }
+        var hasCur = isCur;
+        var hasNext1 = isNext || isLast;
+        var hasNext2 = isNext2 || isNextLast2;
+        var hasPrev1 = isPrev || isFirst;
+        var hasPrev2 = isPrev2 || isPrevFirst2;
+        //局部的每次都做动画
+        setState({
+          hasCur:isCur,
+          hasNext1:hasNext1,
+          hasNext2:hasNext2,
+          hasPrev1:hasPrev1,
+          hasPrev2:hasPrev2
+        });
+        //全局只标记一次
+        states.hasCur = states.hasCur ? states.hasCur : hasCur;
+        states.hasNext1 = states.hasNext1 ? states.hasNext1 : hasNext1;
+        states.hasNext2 = states.hasNext2 ? states.hasNext2 : hasNext2;
+        states.hasPrev1 = states.hasPrev1 ? states.hasPrev1 : hasPrev1;
+        states.hasPrev2 = states.hasPrev2 ? states.hasPrev2 : hasPrev2;
 
       }.bind(this));
 
-      if (!hasCur) { //如果没有当前图片，创建，并移动到合适的位置
-        tDiv = this.createSlide(this.curIndex);
-        this.setPos.apply(this,[tDiv].concat(hasCurEffect));
+      function createCur() {
+        var tDiv = self.createSlide(self.curIndex);
+        self.setPos.apply(self, [tDiv].concat(hasCurEffect));
       }
 
-      if (!hasNext1) {
-        if (this.curIndex < last1) {
-          tDiv = this.createSlide(next1);
-        } else {
-          tDiv = this.createSlide(0);
-        }
-        this.setPos.apply(this, [tDiv].concat(hasNext1Effect));
+      function createNext1() {
+        var tDiv = self.curIndex < last1 ? self.createSlide(next1) : self.createSlide(0);
+        self.setPos.apply(self, [tDiv].concat(hasNext1Effect));
       }
 
-      if (!hasNext2) {
-        if (this.curIndex < last2) {
-          tDiv = this.createSlide(next2);
-        } else if (this.curIndex === last2) {
-          tDiv = this.createSlide(0);
+      function createNext2() {
+        var tDiv;
+        if (self.curIndex < last2) {
+          tDiv = self.createSlide(next2);
+        } else if (self.curIndex === last2) {
+          tDiv = self.createSlide(0);
         } else {
-          tDiv = this.createSlide(1);
+          tDiv = self.createSlide(1);
         }
-        this.setPos.apply(this, [tDiv].concat(hasNext2Effect));
+        self.setPos.apply(self, [tDiv].concat(hasNext2Effect));
       }
 
-      if (!hasPrev1) {
-        if (this.curIndex > 0) {
-          tDiv = this.createSlide(prev1);
-        } else {
-          tDiv = this.createSlide(last1);
-        }
-        this.setPos.apply(this, [tDiv].concat(hasPrev1Effect));
+      function createPrev1() {
+        var tDiv = self.curIndex > 0 ? self.createSlide(prev1) : self.createSlide(last1);
+        self.setPos.apply(self, [tDiv].concat(hasPrev1Effect));
       }
 
-      if (!hasPrev2) {
-        if (this.curIndex > 1) {
-          tDiv = this.createSlide(prev2);
-        } else if (this.curIndex === 1) {
-          tDiv = this.createSlide(last1);
+      function createPrev2() {
+        var tDiv;
+        if (self.curIndex > 1) {
+          tDiv = self.createSlide(prev2);
+        } else if (self.curIndex === 1) {
+          tDiv = self.createSlide(last1);
         } else {
-          tDiv = this.createSlide(last2);
+          tDiv = self.createSlide(last2);
         }
-        this.setPos.apply(this, [tDiv].concat(hasPrev2Effect));
+        self.setPos.apply(self, [tDiv].concat(hasPrev2Effect));
       }
+
+      var createSlide = {
+        hasCur:createCur,
+        hasNext1:createNext1,
+        hasNext2:createNext2,
+        hasPrev1:createPrev1,
+        hasPrev2:createPrev2
+      };
+
+      for(var i in states){
+        if(states.hasOwnProperty(i) && !states[i]){
+          createSlide[i]();
+        }
+      }
+
       if (this.dotsWrap) {
         this.showDotes();
       }
+
     },
     move: function(direction) {
       var slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
