@@ -67,6 +67,85 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 
 ### API
 
+-----
+
+##### EasySlide
+
+-----
+
+#### 方法
+
+-----
+
+##### loader
+#####goto
+##### move
+
+-----
+
+#### 事件
+
+-----
+
+##### progress
+##### loaded
+##### swipeY
+##### swipeX
+##### slide-switchEnd
+##### ppt-switchEnd
+
+-----
+
+#### 初始化参数配置
+
+-----
+
+##### wrapAll
+##### SubpptObjects
+##### replay
+
+-----
+
+#### animate参数配置
+
+-----
+
+##### in
+##### delay
+##### duration
+##### tfunction
+##### iteration
+
+-----
+
+##### index
+##### gindex
+##### layerid
+##### scroll
+##### goto
+##### allowswipe
+
+-----
+
+##### EasySlide.STATIC
+
+##### EasySlide.STATIC.flayerCls
+##### EasySlide.STATIC.flayerTriggerCls
+##### EasySlide.STATIC.animateCls
+##### EasySlide.STATIC.groupCls
+##### EasySlide.STATIC.slideCls
+
+-----
+
+##### EasySlide.Subppt.STATIC
+
+-----
+
+##### EasySlide.Subppt.STATIC.slideCls
+##### EasySlide.Subppt.STATIC.imgWrapCls
+
+-----
+
 ##### EasySlide.utils 
 
 -----
@@ -140,81 +219,3 @@ ClassName选择器
 属性拷贝方法
 
 -----
-
-##### EasySlide.STATIC
-
-##### EasySlide.STATIC.flayerCls
-##### EasySlide.STATIC.flayerTriggerCls
-##### EasySlide.STATIC.animateCls
-##### EasySlide.STATIC.groupCls
-##### EasySlide.STATIC.slideCls
-
------
-
-##### EasySlide.Subppt.STATIC
-
------
-
-##### EasySlide.Subppt.STATIC.slideCls
-##### EasySlide.Subppt.STATIC.imgWrapCls
-
------
-
-##### EasySlide
-
------
-
-#### 方法
-
------
-
-##### loader
-#####goto
-##### move
-
------
-
-#### 事件
-
------
-
-##### progress
-##### loaded
-##### swipeY
-##### swipeX
-##### slide-switchEnd
-##### ppt-switchEnd
-
------
-
-#### 初始化参数配置
-
------
-
-##### wrapAll
-##### SubpptObjects
-##### replay
-
------
-
-#### animate参数配置
-
------
-
-##### in
-##### delay
-##### duration
-##### tfunction
-##### iteration
-
------
-
-##### index
-##### gindex
-##### layerid
-##### scroll
-##### goto
-##### allowswipe
-
------
-
