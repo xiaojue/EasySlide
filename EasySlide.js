@@ -383,6 +383,7 @@
       var subindex = this.subpptNum.indexOf(this.curIndex);
       if (subindex !== -1) { //如果此页有子ppt
         this.subppt[subindex].move(direction);
+        this.trigger('ppt-switchEnd');
       }
     },
     move: function(direction) {
@@ -504,14 +505,6 @@
       utils.bind(win, "resize", this.resize.bind(this));
       this.showCurSlide();
     },
-    createDots: function() {
-      var tFrag = doc.createDocumentFragment();
-      for (var i = 0; i < this.slidesLen; i++) {
-        var tSpan = doc.createElement("span");
-        tFrag.appendChild(tSpan);
-      }
-      this.dotsWrap.appendChild(tFrag);
-    },
     resize: function() {
       this.initSlides(this.wrapDiv);
       var floorvW = this.floorvW.bind(this);
@@ -538,13 +531,6 @@
       tDiv.innerHTML = "<div class='" + Subppt.STATIC.imgWrapCls + "'><img src='" + this.imgs[index] + "' /></div></div>";
       this.wrapDiv.appendChild(tDiv);
       return tDiv;
-    },
-    showDotes: function() {
-      var self = this,
-        spans = utils.getByTagName("span", this.dotsWrap);
-      spans.forEach(function(span, i) {
-        span.className = i === self.curIndex ? "on" : "";
-      });
     },
     floorvW: function(num) {
       return Math.floor(this.vW * num);
@@ -688,11 +674,6 @@
           createSlide[i]();
         }
       }
-
-      if (this.dotsWrap) {
-        this.showDotes();
-      }
-
     },
     move: function(direction) {
       var slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
