@@ -78,8 +78,25 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 -----
 
 ##### loader
+```js
+new EasySlide({
+  
+}).loader(["img1.jpg","img2.jpg"]);
+
+//调用loader方法可以实现预加载图片资源，并可以监听到loaded和progress两个事件
+```
 #####goto
+```js
+var Slide = new EasySlide({});
+Slide.goto(3);
+//页面跳转到对应的slide index
+```
 ##### move
+```js
+var Slide = new EasySlide({});
+Slide.move(1) //-1 参数为1或者-1
+//移动当前页面至前后一页
+```
 
 -----
 
@@ -89,10 +106,39 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 
 ##### progress
 ##### loaded
+```js
+//loader只后，使用on方法可以监听到progress事件，回调第一个参数为百分比
+var Slide = new EasySlide({});
+Slide.on("progress",function(pre){
+//xx.xx %
+});
+Slide.on("loaded",function(){
+//load资源结束
+});
+Slide.loader(["1.jpg","2.jpg"]);
+```
 ##### swipeY
 ##### swipeX
+```js
+var Slide = new EasySlide({});
+Slide.on("swipeX",function(direction){
+//direction为 1或者-1 代表方向
+});
+Slide.on("swipeY",function(direction){
+//direction为 1或者-1 代表方向
+});
+```
 ##### slide-switchEnd
 ##### ppt-switchEnd
+```js
+var Slide = new EasySlide({});
+Slide.on("slide-switchEnd",function(allowSwipe){
+//slide翻页结束后触发，回调返回该页是否可被继续swipe，allowSwipe可能为next或者prev
+});
+Slide.on("ppt-switchEnd",function(direction){
+//幻灯翻页结束后触发
+});
+```
 
 -----
 
@@ -101,9 +147,21 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 -----
 
 ##### wrapAll
+```js
+//必填，所有slides的父节点id
+```
 ##### SubpptObjects
+```js
+SubpptObjects:[{
+   wrapDiv:"", //ppt节点id
+   imgs:["1.jpg","2.jpg"], //ppt幻灯图片
+   parentNum:0 //所在父节点的index值
+}]
+```
 ##### replay
-
+```js
+//布尔值，默认为false，表示动画结束后，再次翻到此页，是否重播动画，对所有slide生效。
+```
 -----
 
 #### animate参数配置
