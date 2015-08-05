@@ -140,7 +140,7 @@
     constructor: swipeEvent,
     isScrollContain: function(ele) {
       while (ele && ele.parentNode) {
-        if(utils.hasAttr(ele,'scroll')){
+        if (utils.hasAttr(ele, 'scroll')) {
           return ele;
         }
         ele = ele.parentNode;
@@ -180,9 +180,9 @@
         var scrollTop = this.scrollEle.scrollTop;
         var eleH = this.scrollEle.clientHeight;
         var scrollH = this.scrollEle.scrollHeight;
-        if(eleH + scrollTop + 10 >= scrollH){
+        if (eleH + scrollTop + 10 >= scrollH) {
           this.trigger('swipeY', [1]);
-        }else if(scrollTop < 10){
+        } else if (scrollTop < 10) {
           this.trigger('swipeY', [-1]);
         }
         return false;
@@ -222,7 +222,7 @@
     this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
 
     var defaultConfig = {
-      replay:false,
+      replay: false,
       wrapAll: ''
     };
 
@@ -352,7 +352,7 @@
         if (tIndex === self.curGIndex) {
           utils.show(group);
           var animateDivs = utils.getByClsName(EasySlide.STATIC.animateCls, group);
-          if(self.replay){
+          if (self.replay) {
             animateDivs.forEach(self.removeAnimation);
           }
           animateDivs.forEach(function(div) {
@@ -490,6 +490,7 @@
     imgWrapCls: 'EasySlide-subppt-imgWrap'
   };
 
+
   Subppt.prototype = {
     init: function(obj) {
       this.wrapDiv = utils.$(obj.wrapDiv);
@@ -552,11 +553,16 @@
       var self = this,
         floorvW = self.floorvW.bind(this),
         tDiv,
+        hasCur = false,
         hasPrev1 = false,
         hasPrev2 = false,
-        hasCur = false,
         hasNext1 = false,
         hasNext2 = false,
+        hasCurEffect = [floorvW(0.2)], 
+        hasNext1Effect = [floorvW(0.9), floorvW(0.05), 0.8],
+        hasNext2Effect= [self.vW + 150, floorvW(0.1), 0.7],
+        hasPrev1Effect = [-floorvW(0.38), floorvW(0.05), 0.8],
+        hasPrev2Effect = [-self.vW - 150, floorvW(0.1), 0.7],
         slides = utils.getByClsName(Subppt.STATIC.slideCls, this.wrapDiv);
 
         var last1 = this.slidesLen - 1;
@@ -583,19 +589,19 @@
 
         if (isCur) {
           hasCur = true;
-          posArgs = [floorvW(0.2)];
+          posArgs = hasCurEffect;
         } else if (isNext || isLast) {
           hasNext1 = true;
-          posArgs = [floorvW(0.9), floorvW(0.05), 0.8];
+          posArgs = hasNext1Effect;
         } else if (isNext2 || isNextLast2) {
           hasNext2 = true;
-          posArgs = [this.vW + 150, floorvW(0.1), 0.7];
+          posArgs = hasNext2Effect;
         } else if (isPrev || isFirst) {
           hasPrev1 = true;
-          posArgs = [-floorvW(0.38), floorvW(0.05), 0.8];
+          posArgs = hasPrev1Effect;
         } else if (isPrev2 || isPrevFirst2) {
           hasPrev2 = true;
-          posArgs = [-this.vW - 150, floorvW(0.1), 0.7];
+          posArgs = hasPrev2Effect;
         } else {
           utils.remove(slide);
         }
@@ -609,16 +615,18 @@
 
       if (!hasCur) { //如果没有当前图片，创建，并移动到合适的位置
         tDiv = this.createSlide(this.curIndex);
-        this.setPos(tDiv, floorvW(0.2));
+        this.setPos.apply(this,[tDiv].concat(hasCurEffect));
       }
+
       if (!hasNext1) {
         if (this.curIndex < last1) {
           tDiv = this.createSlide(next1);
         } else {
           tDiv = this.createSlide(0);
         }
-        this.setPos(tDiv, floorvW(0.9), floorvW(0.05), 0.8);
+        this.setPos.apply(this, [tDiv].concat(hasNext1Effect));
       }
+
       if (!hasNext2) {
         if (this.curIndex < last2) {
           tDiv = this.createSlide(next2);
@@ -627,16 +635,18 @@
         } else {
           tDiv = this.createSlide(1);
         }
-        this.setPos(tDiv, (this.vW + 150), floorvW(0.1), 0.7);
+        this.setPos.apply(this, [tDiv].concat(hasNext2Effect));
       }
+
       if (!hasPrev1) {
         if (this.curIndex > 0) {
           tDiv = this.createSlide(prev1);
         } else {
           tDiv = this.createSlide(last1);
         }
-        this.setPos(tDiv, -floorvW(0.38), floorvW(0.05), 0.8);
+        this.setPos.apply(this, [tDiv].concat(hasPrev1Effect));
       }
+
       if (!hasPrev2) {
         if (this.curIndex > 1) {
           tDiv = this.createSlide(prev2);
@@ -645,7 +655,7 @@
         } else {
           tDiv = this.createSlide(last2);
         }
-        this.setPos(tDiv, (-this.vW - 150), floorvW(0.1), 0.7);
+        this.setPos.apply(this, [tDiv].concat(hasPrev2Effect));
       }
       if (this.dotsWrap) {
         this.showDotes();

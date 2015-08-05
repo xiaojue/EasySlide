@@ -31,7 +31,6 @@
   overflow:hidden;
 }
 .EasySlide-subppt-imgWrap > img{
-  border:1px solid rgba(243,193,120,.1);
   width:100%;
   box-sizing:border-box;
   min-height:300px;
