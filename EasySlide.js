@@ -193,7 +193,7 @@
       var swipe = dragDirec === 'y' ? 'swipeY' : 'swipeX';
       var direction = dragDirec === 'y' ? (this.lastY < this.startY ? 1 : -1) : (this.lastX < this.startX ? 1 : -1);
 
-      if (this.scrollEle) {
+      if (this.scrollEle && this.scrollEleDire === dragDirec) {
 
         var scrollTopLeft = this.scrollEleDire === 'y' ? this.scrollEle.scrollTop : this.scrollEle.scrollLeft;
         var eleHW = this.scrollEleDire === 'y' ? this.scrollEle.clientHeight : this.scrollEle.clientWidth;
