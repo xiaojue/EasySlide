@@ -130,8 +130,8 @@
     this.startY = 0;
     this.lastX = 0;
     this.lastY = 0;
-    this.isScrollMoving = false;
     this.scrollEle = null;
+    this.scrollEleDire = null;
     Events.call(this);
     this.bindSwipe(ele);
   };
@@ -158,13 +158,17 @@
         return false;
       }
       this.scrollEle = null;
+      this.scrollEleDire = null;
       this.startX = this.lastX = e.touches[0].pageX;
       this.startY = this.lastY = e.touches[0].pageY;
     },
     _touchmove: function(e) {
       var scrollEle = this.isScrollContain(e.target);
+      this.lastX = e.touches[0].pageX;
+      this.lastY = e.touches[0].pageY;
       if (scrollEle) {
         this.scrollEle = scrollEle;
+        this.scrollEleDire = utils.attr(scrollEle, 'scroll');
         return false;
       }
       e.preventDefault();
@@ -172,21 +176,10 @@
       if (e.touches && e.touches.length > 1) {
         return false;
       }
-      this.lastX = e.touches[0].pageX;
-      this.lastY = e.touches[0].pageY;
     },
-    _touchend: function() {
-      if (this.scrollEle) {
-        var scrollTop = this.scrollEle.scrollTop;
-        var eleH = this.scrollEle.clientHeight;
-        var scrollH = this.scrollEle.scrollHeight;
-        if (eleH + scrollTop + 10 >= scrollH) {
-          this.trigger('swipeY', [1]);
-        } else if (scrollTop < 10) {
-          this.trigger('swipeY', [-1]);
-        }
-        return false;
-      }
+    _touchend: function(e) {
+
+      var target = e.target;
 
       var absX = Math.abs(this.lastX - this.startX);
       var absY = Math.abs(this.lastY - this.startY);
@@ -197,11 +190,24 @@
         return false;
       }
 
-      if (dragDirec === "y") {
-        this.trigger('swipeY', [this.lastY < this.startY ? 1 : -1]);
-      } else if (dragDirec === "x") {
-        this.trigger('swipeX', [this.lastX < this.startX ? 1 : -1]);
+      var swipe = dragDirec === 'y' ? 'swipeY' : 'swipeX';
+      var direction = dragDirec === 'y' ? (this.lastY < this.startY ? 1 : -1) : (this.lastX < this.startX ? 1 : -1);
+
+      if (this.scrollEle) {
+
+        var scrollTopLeft = this.scrollEleDire === 'y' ? this.scrollEle.scrollTop : this.scrollEle.scrollLeft;
+        var eleHW = this.scrollEleDire === 'y' ? this.scrollEle.clientHeight : this.scrollEle.clientWidth;
+        var scrollHW = this.scrollEleDire === 'y' ? this.scrollEle.scrollHeight : this.scrollEle.scrollWidth;
+
+        if (eleHW + scrollTopLeft + 10 >= scrollHW) {
+          this.trigger(swipe, [1, target]);
+        } else if (scrollTopLeft < 10) {
+          this.trigger(swipe, [-1, target]);
+        }
+        return false;
       }
+
+      this.trigger(swipe, [direction, target]);
     }
   };
 
@@ -222,6 +228,7 @@
     this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
 
     var defaultConfig = {
+      swipeDirection: 'y',
       replay: false,
       wrapAll: ''
     };
@@ -249,6 +256,8 @@
 
       function initSub(index, subpptObj) {
         self.subppt[index] = new EasySlide.Subppt({
+          width: self.vW,
+          height: self.vH,
           wrapDiv: subpptObj.wrapDiv,
           imgs: subpptObj.imgs
         });
@@ -297,8 +306,8 @@
 
     },
     initSlides: function(wrap) {
-      this.vW = utils.viewData().viewWidth;
-      this.vH = utils.viewData().viewHeight;
+      this.vW = this.width || utils.viewData().viewWidth;
+      this.vH = this.height || utils.viewData().viewHeight;
       wrap.style.height = this.vH + "px";
       wrap.style.width = this.vW + "px";
     },
@@ -308,6 +317,9 @@
     },
     setYPos: function(el, posY) { //设置slide的竖直方向位置
       el.style["-webkit-transform"] = "translate3d(0," + posY + "px,0)";
+    },
+    setXPos: function(el, posX) { //设置slide的竖直方向位置
+      el.style["-webkit-transform"] = "translate3d(" + posX + "px,0,0)";
     },
     removeAnimation: function(el) {
       el.style['-webkit-animation'] = "";
@@ -329,21 +341,27 @@
         var isNext = tIndex === self.curIndex + 1;
         var isPrev = tIndex === self.curIndex - 1;
         var y = isCur ? 0 : null;
+        var x = isCur ? 0 : null;
 
         if (isNext || isEnd) {
           y = self.vH;
+          x = self.vW;
         } else if (isPrev || isFirst) {
           y = -self.vH;
+          x = -self.vW;
         }
 
-
         if (isCur || isNext || isPrev || isEnd || isFirst) {
-          self.setYPos(slide, y);
+          if (self.swipeDirection === 'y') {
+            self.setYPos(slide, y);
+          } else if (self.swipeDirection === 'x') {
+            self.setXPos(slide, x);
+          }
           utils.show(slide);
         } else {
           utils.hide(slide);
         }
-        
+
       });
 
       this.curGroups.forEach(function(group) {
@@ -369,21 +387,28 @@
           utils.hide(group);
         }
       });
-      var allowswipe = utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
+      var allowswipe = this.getCurAllowSwipe(); //获得该针是否允许上下滑动
       this.trigger('slide-switchEnd', [allowswipe]);
     },
-    allowSwipeY: function(direction) {
-      //获得该针是否允许上下滑动
-      var allowswipe = utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
-      if (!allowswipe || allowswipe === "next" || allowswipe === 'prev') {
-        this.move(direction);
-      }
+    getCurAllowSwipe: function() {
+      return utils.attr(this.curGroups[this.curGIndex], "allowswipe"); //获得该针是否允许上下滑动
     },
-    allowSwipeX: function(direction) {
+    allowSwipeY: function(direction) {
+      this.allowSwipe(direction, 'y');
+    },
+    allowSwipeX: function(direction, target) {
       var subindex = this.subpptNum.indexOf(this.curIndex);
-      if (subindex !== -1) { //如果此页有子ppt
+      if (subindex !== -1 && utils.contain(target, EasySlide.Subppt.STATIC.imgWrapCls)) { //如果此页有子ppt
         this.subppt[subindex].move(direction);
         this.trigger('ppt-switchEnd');
+        return;
+      }
+      this.allowSwipe(direction, 'x');
+    },
+    allowSwipe: function(direction, swipeDirection) {
+      var allowswipe = this.getCurAllowSwipe(); //获得该针是否允许上下滑动
+      if ((!allowswipe || allowswipe === "next" || allowswipe === 'prev') && this.swipeDirection === swipeDirection) {
+        this.move(direction);
       }
     },
     move: function(direction) {
@@ -483,6 +508,8 @@
 
   var Subppt = function(obj) {
     this.curIndex = 0;
+    this.width = obj.width;
+    this.height = obj.height;
     this.init(obj);
   };
 
@@ -603,11 +630,11 @@
         var hasPrev2 = isPrev2 || isPrevFirst2;
         //局部的每次都做动画
         setState({
-          hasCur:isCur,
-          hasNext1:hasNext1,
-          hasNext2:hasNext2,
-          hasPrev1:hasPrev1,
-          hasPrev2:hasPrev2
+          hasCur: isCur,
+          hasNext1: hasNext1,
+          hasNext2: hasNext2,
+          hasPrev1: hasPrev1,
+          hasPrev2: hasPrev2
         });
         //全局只标记一次
         states.hasCur = states.hasCur ? states.hasCur : hasCur;
@@ -658,15 +685,15 @@
       }
 
       var createSlide = {
-        hasCur:createCur,
-        hasNext1:createNext1,
-        hasNext2:createNext2,
-        hasPrev1:createPrev1,
-        hasPrev2:createPrev2
+        hasCur: createCur,
+        hasNext1: createNext1,
+        hasNext2: createNext2,
+        hasPrev1: createPrev1,
+        hasPrev2: createPrev2
       };
 
-      for(var i in states){
-        if(states.hasOwnProperty(i) && !states[i]){
+      for (var i in states) {
+        if (states.hasOwnProperty(i) && !states[i]) {
           createSlide[i]();
         }
       }

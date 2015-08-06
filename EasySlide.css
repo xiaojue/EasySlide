@@ -33,7 +33,6 @@
 .EasySlide-subppt-imgWrap > img{
   width:100%;
   box-sizing:border-box;
-  min-height:300px;
   background:transparent;
 }
 

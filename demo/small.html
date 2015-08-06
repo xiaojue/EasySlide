@@ -10,9 +10,6 @@
     <link href="../EasySlide.css" rel="stylesheet">
     <script src="../EasySlide.js"></script>
     <style>
-      body{
-        background:-webkit-gradient(linear,center top,center bottom,from(#888), to(#fff)); 
-      }
       .docTitle{
         margin-top:10%;
         margin-bottom:10%;
@@ -43,13 +40,18 @@
         text-align:left;
         margin-bottom:10px;
       }
+      #j_wrap{
+        margin:10% auto;
+        background:#fff; 
+        border:#000 solid 1px;
+      }
     </style>
   </head>
   <body>
     <div class="EasySlide-warp" id="j_wrap">
       <div index="0" class="EasySlide-slides">
         <div class="EasySlide-groups docGroups" gindex="0">
-          <div style="position:absolute;width:100%;top:18%;left:0;" id="j_ppt"></div>
+          <div id="j_ppt"></div>
         </div>
       </div>
       <div index="1" class="EasySlide-slides">
@@ -101,6 +103,9 @@
   </body>
   <script>
     new EasySlide({
+      swipeDirection:'x',
+      width:300,
+      height:300,
       replay:true,
       subpptObjects:[{
         wrapDiv:"j_ppt",
