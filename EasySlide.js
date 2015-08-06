@@ -314,6 +314,7 @@
         });
       }, 500);
     },
+    //x 效果好
     'rotate': function(ele, axis, offsetEnd) {
       var rotateDirect = (axis === 'X') ? 'Y' : 'X';
       var tIndex = parseInt(utils.attr(ele, 'index'), 10);
