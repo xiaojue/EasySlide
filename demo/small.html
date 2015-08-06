@@ -30,10 +30,11 @@
       }
       .docText{
         margin:0 auto;
-        width:80%; 
+        width:80%;
         line-height:200%;
-        height:320px;
+        height:100px;
         overflow-y:auto;
+        background:#fff;
       }
       .docText p{
         text-indent:20px;
@@ -69,16 +70,10 @@
       <div index="2" class="EasySlide-slides" style="background:green;">
         <div class="EasySlide-groups docGroups" gindex="0">
           <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">什么是EasySlide?</h1>
-          <div delay="1.3s" in="fadeIn" class="EasySlide-animate docText" scroll="y">
-            <p>
-            不基于任何框架、快速、独立的制作H5 Mobile页面的框架。它包含资源loader，页面切换功能，子类PPT功能，内部页面跳转功能，page overlay功能，自定义动画效果和扩展动画效果等功能。
-            </p>
-            <p>
-            使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可。
-            </p>
-            <p>
-            内置一些utils和动画效果，你也可以使用监听器和自己编写CSS类来扩展EasySlide.
-            </p>
+          <div delay="1.3s" duration=".5s" in="fadeIn" class="EasySlide-animate docText" scroll="y">
+            <p>不基于任何框架、快速、独立的制作H5 Mobile页面的框架。它包含资源loader，页面切换功能，子类PPT功能，内部页面跳转功能，page overlay功能，自定义动画效果和扩展动画效果等功能</p>
+            <p>使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可。</p>
+            <p>使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可。</p>
           </div>
         </div>
       </div> 
@@ -103,10 +98,11 @@
   </body>
   <script>
     new EasySlide({
+      animateEffect:'rotate',
       swipeDirection:'x',
+      replay:true,
       width:300,
       height:300,
-      replay:true,
       subpptObjects:[{
         wrapDiv:"j_ppt",
         imgs:["images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg","images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg"],

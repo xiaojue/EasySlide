@@ -100,6 +100,28 @@
         }
       }
       return sup;
+    },
+    transitionDurationToMilliseconds: function(duration) {
+      var pieces = duration.match(/^([\d\.]+)(\w+)$/),
+        time, unit, multiplier;
+
+      if (pieces.length <= 1) {
+        return duration;
+      }
+
+      time = pieces[1];
+      unit = pieces[2];
+
+      switch (unit) {
+        case 'ms':
+          multiplier = 1;
+          break;
+        case 's':
+          multiplier = 1000;
+          break;
+      }
+
+      return time * multiplier;
     }
   };
 
@@ -228,6 +250,7 @@
     this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
 
     var defaultConfig = {
+      animateEffect: 'default',
       swipeDirection: 'y',
       replay: false,
       wrapAll: ''
@@ -247,6 +270,85 @@
     animateCls: 'EasySlide-animate',
     groupCls: 'EasySlide-groups',
     slideCls: 'EasySlide-slides'
+  };
+
+  EasySlide.animationEffects = {
+    'default': function(ele, axis, offsetEnd) {
+      ele.style["-webkit-transform"] = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
+    },
+    'scale': function(ele, axis, offsetEnd) {
+      var tIndex = parseInt(utils.attr(ele, 'index'), 10);
+      var transform = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
+      if (this.curIndex !== tIndex) {
+        transform += ' scale(0.5)';
+      }
+      ele.style["-webkit-transform"] = transform;
+    },
+    'flip': function(ele, axis) {
+      var rotateDirect = (axis === 'X') ? 'Y' : 'X';
+      var tIndex = parseInt(utils.attr(ele, 'index'), 10);
+      ele.style['-webkit-backface-visibility'] = 'hidden';
+      ele.style['-webkit-transform-style'] = 'preserve-3d';
+      ele.style.zIndex = tIndex;
+      var eles = utils.getByTagName('*', ele);
+      var duration = window.getComputedStyle(ele, null)['transition-duration'];
+      duration = duration ? utils.transitionDurationToMilliseconds(duration) : 0;
+      //有滚动条的容器，会对backface-visbility无效，需要做隐藏
+      eles.forEach(function(ele) {
+        if (utils.hasAttr(ele, 'scroll')) {
+          utils.hide(ele);
+        }
+      });
+      if (this.curIndex === tIndex) {
+        ele.style.visibility = 'visible';
+        ele.style['-webkit-transform'] = 'rotate' + rotateDirect + '(0deg) translateZ(0)';
+      } else {
+        ele.style.visibility = 'hidden';
+        ele.style['-webkit-transform'] = 'rotate' + rotateDirect + '(180deg) translateZ(0)';
+      }
+      setTimeout(function() {
+        eles.forEach(function(ele) {
+          if (utils.hasAttr(ele, 'scroll')) {
+            utils.show(ele);
+          }
+        });
+      }, 500);
+    },
+    'rotate': function(ele, axis, offsetEnd) {
+      var rotateDirect = (axis === 'X') ? 'Y' : 'X';
+      var tIndex = parseInt(utils.attr(ele, 'index'), 10);
+      var scale = axis === 'X' ? this.vW : this.vH;
+      ele.style['-webkit-backface-visibility'] = 'hidden';
+      ele.style['-webkit-transform-style'] = 'preserve-3d';
+      ele.style.position = 'absolute';
+      this.wrapAll.style.webkitPerspective = scale * 4;
+      if (tIndex === this.curIndex) {
+        ele.style.zIndex = 1;
+        ele.style['-webkit-transform'] = 'rotate' + rotateDirect + '(0deg) translateZ(0) scale(1)';
+      } else {
+        var isNext = tIndex === this.curIndex + 1;
+        var isEnd = this.curIndex === this.slidesLen - 1 && tIndex === 0;
+        var index = isNext || isEnd ? 1 : -1;
+        ele.style.zIndex = 0;
+        ele.style['-webkit-transform'] = 'rotate' + rotateDirect + '(' + 90 * index + 'deg) translateZ(' + (0.888 * scale / 2) + 'px) translate' + axis + '(' + offsetEnd + 'px) scale(0.888)';
+      }
+    },
+    'card': function(ele, axis, offsetEnd) {
+      var tIndex = parseInt(utils.attr(ele, 'index'), 10);
+      var transform = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
+      var duration = window.getComputedStyle(ele, null)['transition-duration'];
+      duration = duration ? utils.transitionDurationToMilliseconds(duration) : 0;
+      ele.style.position = 'absolute';
+      if(tIndex === this.curIndex){
+        ele.style.zIndex = 1;
+        ele.style["-webkit-transform"] = transform;
+      }else{
+        ele.style.zIndex = 0;
+        setTimeout(function(){
+          ele.style["-webkit-transform"] = transform;
+        },duration);
+      }
+    }
   };
 
   EasySlide.prototype = {
@@ -316,10 +418,10 @@
       this.showCurSlide();
     },
     setYPos: function(el, posY) { //设置slide的竖直方向位置
-      el.style["-webkit-transform"] = "translate3d(0," + posY + "px,0)";
+      EasySlide.animationEffects[this.animateEffect].call(this, el, 'Y', posY);
     },
     setXPos: function(el, posX) { //设置slide的竖直方向位置
-      el.style["-webkit-transform"] = "translate3d(" + posX + "px,0,0)";
+      EasySlide.animationEffects[this.animateEffect].call(this, el, 'X', posX);
     },
     removeAnimation: function(el) {
       el.style['-webkit-animation'] = "";
