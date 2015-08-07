@@ -95,9 +95,11 @@
         </div>
       </div> 
     </div>
+    <a id="prev" href="javascript:;">prev</a>
+    <a id="next" href="javascript:;">next</a>
   </body>
   <script>
-    new EasySlide({
+    var slide = new EasySlide({
       animateEffect:'rotate',
       swipeDirection:'x',
       replay:true,
@@ -109,6 +111,15 @@
         parentNum:0
       }],
       wrapAll:'j_wrap'
-    }); 
+    });
+    var utils = EasySlide.utils;
+    var next = utils.$('next');
+    var prev = utils.$('prev');
+    utils.bind(next,'click',function(){
+      slide.move(1); 
+    });
+    utils.bind(prev,'click',function(){
+      slide.move(-1); 
+    });
   </script>
 </html>
