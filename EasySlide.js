@@ -8,6 +8,7 @@
 (function(win, doc, undef) {
 
   var UA = navigator.userAgent;
+  var toString = Object.prototype.toString;
 
   var utils = {
     $: function(id) {
@@ -122,6 +123,12 @@
       }
 
       return time * multiplier;
+    },
+    isArray: function(v) {
+      return toString.call(v) === '[object Array]';
+    },
+    isObject: function(v) {
+      return toString.call(v) === '[object Object]';
     }
   };
 
@@ -235,6 +242,107 @@
 
   swipeEvent.prototype = utils.mixin(swipeEvent.prototype, Events.prototype);
 
+  function loader() {
+    this.resources = {};
+    this.audio = {};
+    this.video = {};
+  }
+
+  loader.prototype = {
+    constructor: loader,
+    getFilename: function(url) {
+      return url.slice(url.lastIndexOf('/') + 1).replace(/\?.*$/, '').toLowerCase();
+    },
+    getExtName: function(url) {
+      return url.slice(url.lastIndexOf('.') + 1, url.length).toLowerCase();
+    },
+    getCreateNode: function(ext) {
+      var types = {
+        img: ['jpg', 'jpeg', 'gif', 'png', 'bmp'],
+        video: ['webm', 'mp4'],
+        audio: ['ogg', 'wav', 'mp3', 'aac']
+      };
+      for (var i in types) {
+        if (types.hasOwnProperty(i) && types[i].indexOf(ext) > -1) {
+          return i;
+        }
+      }
+      return null;
+    },
+    _getResourcesMap: function(resources) {
+      var self = this;
+      resources.forEach(function(resource) {
+        var fileName, fileExt, filePath;
+        if (typeof resource === 'object') {
+          fileName = resource.name;
+          fileExt = self.getExtName(resource.path);
+          filePath = resource.path;
+        } else {
+          fileName = self.getFilename(resource);
+          fileExt = self.getExtName(resource);
+          filePath = resource;
+        }
+        self.resources[fileName] = {
+          path: filePath,
+          name: fileName,
+          type: fileExt,
+          node: self.getCreateNode(fileExt)
+        };
+        if (self.resources[fileName].node === null) {
+          throw new Error('load resource ext is not support' + fileExt + ',' + filePath);
+        }
+      });
+    },
+    _fetch: function(res, cb) {
+      var self = this,
+        name = res.name,
+        path = res.path,
+        node = res.node;
+      var Tag = doc.createElement(node);
+      if (node === 'img') {
+        Tag.onload = Tag.onerror = function() {
+          utils.remove(Tag);
+          cb();
+        };
+      } else {
+        utils.bind(Tag, 'canplaythrough', function() {
+          if (node === 'video') {
+            self.video[name] = Tag;
+          } else {
+            self.audio[name] = Tag;
+          }
+          cb();
+        });
+      }
+      Tag.style.display = 'none';
+      Tag.src = path;
+      doc.body.appendChild(Tag);
+    },
+    loader: function(resources) {
+      var self = this,
+        resourceLen = 0,
+        successCount = 0;
+
+      this._getResourcesMap(resources);
+      resourceLen = Object.keys(this.resources).length;
+
+      function callback() {
+        successCount++;
+        //console.log(successCount,resourceLen);
+        self.trigger('progress', [(successCount / resourceLen * 100).toFixed(2)]);
+        if (successCount === resourceLen) {
+          self.trigger('loaded');
+        }
+      }
+      for (var i in this.resources) {
+        if (this.resources.hasOwnProperty(i)) {
+          this._fetch(this.resources[i], callback);
+        }
+      }
+    }
+  };
+
+
   var EasySlide = function(config) {
 
     this.slides = [];
@@ -249,7 +357,7 @@
     this.subpptNum = []; //哪些slide是有左右滑动的子ppt的
 
     var defaultConfig = {
-      firstTime:true,
+      firstTime: true,
       animateEffect: 'default',
       swipeDirection: 'y',
       replay: false,
@@ -261,6 +369,7 @@
 
     this.wrapAll = utils.$(this.wrapAll);
     swipeEvent.call(this, this.wrapAll);
+    loader.call(this);
     this.init();
   };
 
@@ -340,14 +449,14 @@
       var duration = window.getComputedStyle(ele, null)['transition-duration'];
       duration = duration ? utils.transitionDurationToMilliseconds(duration) : 0;
       ele.style.position = 'absolute';
-      if(tIndex === this.curIndex){
+      if (tIndex === this.curIndex) {
         ele.style.zIndex = 1;
         ele.style["-webkit-transform"] = transform;
-      }else{
+      } else {
         ele.style.zIndex = 0;
-        setTimeout(function(){
+        setTimeout(function() {
           ele.style["-webkit-transform"] = transform;
-        },duration);
+        }, duration);
       }
     }
   };
@@ -586,28 +695,12 @@
       this.curGLen = this.curGroups.length;
       this.curGIndex = 0;
       this.showCurSlide();
-    },
-    loader: function(resource) {
-      //加载资源loading界面
-      var self = this,
-        timg = [],
-        resourceLen = resource.length,
-        successCount = 0;
-      resource.forEach(function(src, index) {
-        timg[index] = new Image();
-        timg[index].onload = timg[index].onerror = function() {
-          successCount++;
-          self.trigger('progress', [(successCount / resourceLen * 100).toFixed(2)]);
-          if (successCount === resourceLen) {
-            self.trigger('loaded');
-          }
-        };
-        timg[index].src = src;
-      });
     }
   };
 
+
   EasySlide.prototype = utils.mixin(EasySlide.prototype, swipeEvent.prototype);
+  EasySlide.prototype = utils.mixin(EasySlide.prototype, loader.prototype);
 
   var Subppt = function(obj) {
     this.curIndex = 0;
