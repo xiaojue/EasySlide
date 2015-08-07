@@ -296,6 +296,7 @@ div#loading{margin:15px auto 0;}
   }));
 
   page.on('progress',function(percent){
+    console.log(percent);
     utils.$('loading').innerHTML = percent + '%';
   });
 
@@ -307,7 +308,7 @@ div#loading{margin:15px auto 0;}
     if (allowswipe === "no" || allowswipe === "prev") {
       utils.hide(arrow);
     } else {
-      utils.show(arrow, true);
+      utils.show(arrow);
     }
   });
 

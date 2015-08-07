@@ -380,7 +380,6 @@
     groupCls: 'EasySlide-groups',
     slideCls: 'EasySlide-slides'
   };
-
   EasySlide.animationEffects = {
     'default': function(ele, axis, offsetEnd) {
       ele.style["-webkit-transform"] = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
@@ -421,7 +420,7 @@
             utils.show(ele);
           }
         });
-      }, 500);
+      }, duration);
     },
     //x 效果好
     'rotate': function(ele, axis, offsetEnd) {
