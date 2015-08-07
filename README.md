@@ -170,6 +170,19 @@ SubpptObjects:[{
 ```js
 //布尔值，默认为false，表示动画结束后，再次翻到此页，是否重播动画，对所有slide生效。
 ```
+##### firstTime
+```js
+第一屏第一轮是否可以回滚设置，默认为true，不可以
+```
+##### animateEffect
+```
+slide切换所使用的特效名称 默认 default, 可选:(card,rotate,flip,scale)
+```
+##### swipeDirection
+```js
+slide滑动方向，默认为 "y"
+```
+
 -----
 
 #### animate参数配置
