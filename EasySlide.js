@@ -247,9 +247,9 @@
 
     this.subppt = [];
     this.subpptNum = []; //哪些slide是有左右滑动的子ppt的
-    this.firstTime = true; //是否是第一次浏览。如果是第一次，不能从第0张直接滑动看最后一张
 
     var defaultConfig = {
+      firstTime:true,
       animateEffect: 'default',
       swipeDirection: 'y',
       replay: false,
