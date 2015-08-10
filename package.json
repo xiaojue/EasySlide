@@ -14,7 +14,7 @@
     "h5"
   ],
   "dependencies": {
-    "gulp": "*",
+    "gulp": "*"
   },
   "devDependencies": {
     "gulp": "*",
