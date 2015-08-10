@@ -240,6 +240,10 @@
         return false;
       }
 
+      if (dragDirec !== this.swipeDirection) {
+        this.trigger('dragDirecNotEqual');
+      }
+
       var swipe = dragDirec === 'y' ? 'swipeY' : 'swipeX';
       var direction = dragDirec === 'y' ? (this.lastY < this.startY ? 1 : -1) : (this.lastX < this.startX ? 1 : -1);
 
@@ -258,6 +262,7 @@
       }
 
       this.trigger(swipe, [direction, target]);
+      this.trigger('swipeEnd');
     }
   };
 
@@ -278,6 +283,7 @@
     this.subpptNum = []; //哪些slide是有左右滑动的子ppt的
 
     var defaultConfig = {
+      margin: 0,
       transition: 'all 0.5s ease',
       firstTime: true,
       animateEffect: 'default',
@@ -324,15 +330,18 @@
         e.preventDefault();
       });
     },
-    init: function() {
-
-      this.initSlides(this.wrapAll);
-
+    renderSlide: function() {
       this.slides = utils.getByClsName(EasySlide.STATIC.slideCls, this.wrapAll);
       this.slidesLen = this.slides.length;
       this.curGroups = utils.getByClsName(EasySlide.STATIC.groupCls, this.slides[0]);
       this.curGLen = this.curGroups.length;
       this.showCurSlide();
+    },
+    init: function() {
+
+      this.initSlides(this.wrapAll);
+
+      this.renderSlide();
 
       this.bindEvent();
 
@@ -368,9 +377,8 @@
     setAnimation: function(el, animation) {
       el.style["-webkit-animation"] = animation.name + " " + animation.duration + " " + animation.tfunction + " " + animation.delay + " " + animation.iteration + " normal forwards";
     },
-    showCurSlide: function() {
+    showSlide: function() {
       var self = this;
-      var attr = utils.attr;
 
       this.slides.forEach(function(slide) {
 
@@ -384,11 +392,11 @@
         var x = isCur ? 0 : null;
 
         if (isNext || isEnd) {
-          y = self.vH;
-          x = self.vW;
+          y = self.vH + self.margin;
+          x = self.vW + self.margin;
         } else if (isPrev || isFirst) {
-          y = -self.vH;
-          x = -self.vW;
+          y = -self.vH - self.margin;
+          x = -self.vW - self.margin;
         }
 
         if (isCur || isNext || isPrev || isEnd || isFirst) {
@@ -403,6 +411,12 @@
         }
 
       });
+    },
+    showCurSlide: function() {
+      var self = this;
+      var attr = utils.attr;
+      
+      this.showSlide();
 
       this.curGroups.forEach(function(group) {
         var tIndex = parseInt(utils.attr(group, "gIndex"), 10);

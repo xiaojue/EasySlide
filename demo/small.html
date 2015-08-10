@@ -49,9 +49,15 @@
         background:#fff; 
         border:#000 solid 1px;
       }
+
+      .EasySlide-warp {
+        overflow:initial;
+      }
+    
     </style>
   </head>
   <body>
+    <div style="width:450px;overflow:hidden;margin:20px;positive:relative;">
     <div class="EasySlide-warp" id="j_wrap">
       <div index="0" class="EasySlide-slides" style="background:red;">
         <div class="EasySlide-groups docGroups" gindex="0">
@@ -96,7 +102,8 @@
           <p delay="1.5s" in="fadeInUp" class="EasySlide-animate">项目主页</p>
           <p delay="2s" in="zoomIn" class="EasySlide-animate"><a href="http://github.com/xiaojue/EasySlide" target="_blank">http://github.com/xiaojue/EasySlide</a></p>
         </div>
-      </div> 
+      </div>
+    </div>
     </div>
     <a id="prev" href="javascript:;">prev</a>
     <a id="next" href="javascript:;">next</a>
@@ -104,6 +111,8 @@
   <script>
     var slide = new EasySlide({
       swipeDirection:'x',
+      firstTime:false,
+      margin:10,
       replay:true,
       width:300,
       height:300,
@@ -114,6 +123,7 @@
       }],
       wrapAll:'j_wrap'
     });
+
     var utils = EasySlide.utils;
     var next = utils.$('next');
     var prev = utils.$('prev');
@@ -124,14 +134,15 @@
       slide.move(-1); 
     });
     //编写跟随手指移动的插件,只编写了default的例子
+    /*
     slide.on('swipeMove',function(slides,moves,target){
       var self = slide;
       var cur = slides[self.curIndex];
       var prev = slides[self.curIndex - 1] || slides[slides.length - 1];
       var next = slides[self.curIndex + 1] || slides[0];
       var curLeft = 0;
-      var nextLeft = cur.clientWidth;
-      var prevLeft = - cur.clientWidth;
+      var nextLeft = cur.clientWidth + self.margin;
+      var prevLeft = - cur.clientWidth - self.margin;
       var moved = self.swipeDirection == 'x' ? moves.moveX * moves.positive.x : moves.moveY * moves.positive.y;
       var subindex = self.subpptNum.indexOf(self.curIndex);
       if (subindex !== -1 && utils.contain(target, EasySlide.Subppt.STATIC.imgWrapCls)) { //如果此页有子ppt
@@ -144,5 +155,19 @@
       EasySlide.animationEffects['default'](prev,self.swipeDirection,moved+prevLeft);
       EasySlide.animationEffects['default'](next,self.swipeDirection,moved+nextLeft);
     });
+    //先小幅度滑动再大幅度反向，会造成停留，在end的时候重置
+    slide.on('swipeEnd', slide.showCurSlide.bind(slide));
+    */
+    //动态插入第5个,你也可以重新绘制innerHTML，再调用renderSlide,不支持subppt的后初始化
+    var slide5 = '<div index="5" class="EasySlide-slides" style="background:blue;">\
+        <div class="EasySlide-groups docGroups" gindex="0">\
+          <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">EasySlide555</h1>\
+        </div>\
+      </div>';
+    var temp = document.createElement('div');
+    temp.innerHTML = slide5;
+    slide.wrapAll.appendChild(temp.firstChild);
+    slide.renderSlide();
+    
   </script>
 </html>
