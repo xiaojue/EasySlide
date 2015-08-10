@@ -35,12 +35,13 @@
 
 <p>使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可，它还内置一些utils和动画效果，你也可以使用监听器和自己编写CSS类来扩展EasySlide.</p>
 
+<p>EasySlide独立分为4个js文件，如果你只需要基本功能，则只引用dist/EasySlide.js即可。</p>
+
 <h3>
 <a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h3>
 
-<p><img src="demo/images/demo.gif" alt="EasySlide"></p>
-
-<p><img src="demo/images/yoga.gif" alt="EasySlide"></p>
+<p><img width="200" height="300" src="https://raw.githubusercontent.com/xiaojue/EasySlide/master/demo/images/demo.gif">
+<img height="300" src="https://raw.githubusercontent.com/xiaojue/EasySlide/master/demo/images/yoga.gif"></p>
 
 <pre><code>gif图片较大，耐心等待刷出~，gif有丢帧，详细请clone本项目，打开demo文件夹查看，本地可运行。
 </code></pre>
@@ -54,8 +55,11 @@
    &lt;<span class="pl-ent">head</span>&gt;
        &lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>viewport<span class="pl-pds">"</span></span> <span class="pl-e">content</span>=<span class="pl-s"><span class="pl-pds">"</span>width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no<span class="pl-pds">"</span></span> /&gt;
        &lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>reset.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span>&gt; <span class="pl-c">&lt;!-- 或者你自己的reste css --&gt;</span>
-       &lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>../EasySlide.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span>&gt; <span class="pl-c">&lt;!-- EasySlide所依赖的css --&gt;</span>
-<span class="pl-s1">       &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../EasySlide.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span> <span class="pl-c">&lt;!-- EasySlide所依赖的js --&gt;</span>
+       &lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>../dist/EasySlide.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span>&gt; <span class="pl-c">&lt;!-- EasySlide所依赖的css --&gt;</span>
+<span class="pl-s1">       &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../dist/EasySlide.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span> <span class="pl-c">&lt;!-- EasySlide所依赖的js --&gt;</span>
+<span class="pl-s1">       &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../dist/loader.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt; </span>
+<span class="pl-s1">       &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../dist/ppt.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt; </span>
+<span class="pl-s1">       &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>../dist/effects.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt; </span>
    &lt;/<span class="pl-ent">head</span>&gt;
    &lt;<span class="pl-ent">body</span>&gt;
        &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>EasySlide-warp<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>j_wrap<span class="pl-pds">"</span></span>&gt;
@@ -133,6 +137,21 @@ Slide.goto(<span class="pl-c1">3</span>);
 Slide.<span class="pl-c1">move</span>(<span class="pl-c1">1</span>) <span class="pl-c">//-1 参数为1或者-1</span>
 <span class="pl-c">//移动当前页面至前后一页</span></pre></div>
 
+<h5>
+<a id="renderslide" class="anchor" href="#renderslide" aria-hidden="true"><span class="octicon octicon-link"></span></a>renderSlide</h5>
+
+<div class="highlight highlight-js"><pre>动态修改过容器之后，可以调用此方法重新计算容器动画和元素个数。</pre></div>
+
+<h5>
+<a id="showcurslide" class="anchor" href="#showcurslide" aria-hidden="true"><span class="octicon octicon-link"></span></a>showCurSlide</h5>
+
+<div class="highlight highlight-js"><pre>可以调用此方法执行当前页切换动画</pre></div>
+
+<h5>
+<a id="getcurallowswipe" class="anchor" href="#getcurallowswipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>getCurAllowSwipe</h5>
+
+<div class="highlight highlight-js"><pre>获取当前slide的可滑动状态</pre></div>
+
 <hr>
 
 <h4>
@@ -162,13 +181,30 @@ Slide.loader([<span class="pl-s"><span class="pl-pds">"</span>1.jpg<span class="
 <h5>
 <a id="swipex" class="anchor" href="#swipex" aria-hidden="true"><span class="octicon octicon-link"></span></a>swipeX</h5>
 
+<h5>
+<a id="swipemove" class="anchor" href="#swipemove" aria-hidden="true"><span class="octicon octicon-link"></span></a>swipeMove</h5>
+
+<h5>
+<a id="swipeend" class="anchor" href="#swipeend" aria-hidden="true"><span class="octicon octicon-link"></span></a>swipeEnd</h5>
+
 <div class="highlight highlight-js"><pre><span class="pl-k">var</span> Slide <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">EasySlide</span>({});
 Slide.on(<span class="pl-s"><span class="pl-pds">"</span>swipeX<span class="pl-pds">"</span></span>,<span class="pl-k">function</span>(<span class="pl-smi">direction</span>){
 <span class="pl-c">//direction为 1或者-1 代表方向</span>
 });
 Slide.on(<span class="pl-s"><span class="pl-pds">"</span>swipeY<span class="pl-pds">"</span></span>,<span class="pl-k">function</span>(<span class="pl-smi">direction</span>){
 <span class="pl-c">//direction为 1或者-1 代表方向</span>
+});
+Slide.on(<span class="pl-s"><span class="pl-pds">"</span>swipeMove<span class="pl-pds">"</span></span>,<span class="pl-k">function</span>(){
+<span class="pl-c">//可以自己扩展移动时的动画，在demo中有体现用法</span>
+});
+Slide.on(<span class="pl-s"><span class="pl-pds">"</span>swipeEnd<span class="pl-pds">"</span></span>,<span class="pl-k">function</span>(){
+<span class="pl-c">//在touchend时触发</span>
 });</pre></div>
+
+<h5>
+<a id="dragdirecnotequal" class="anchor" href="#dragdirecnotequal" aria-hidden="true"><span class="octicon octicon-link"></span></a>dragDirecNotEqual</h5>
+
+<div class="highlight highlight-js"><pre>在滑动方向与默认方向相反时，touchEnd触发</pre></div>
 
 <h5>
 <a id="slide-switchend" class="anchor" href="#slide-switchend" aria-hidden="true"><span class="octicon octicon-link"></span></a>slide-switchEnd</h5>
@@ -225,6 +261,17 @@ Slide.on(<span class="pl-s"><span class="pl-pds">"</span>ppt-switchEnd<span clas
 <a id="swipedirection" class="anchor" href="#swipedirection" aria-hidden="true"><span class="octicon octicon-link"></span></a>swipeDirection</h5>
 
 <div class="highlight highlight-js"><pre>slide滑动方向，默认为 <span class="pl-s"><span class="pl-pds">"</span>y<span class="pl-pds">"</span></span></pre></div>
+
+<h5>
+<a id="margin" class="anchor" href="#margin" aria-hidden="true"><span class="octicon octicon-link"></span></a>margin</h5>
+
+<div class="highlight highlight-js"><pre>选填默认<span class="pl-c1">0</span>，制作多个slide共存在view中可用</pre></div>
+
+<h5>
+<a id="transition" class="anchor" href="#transition" aria-hidden="true"><span class="octicon octicon-link"></span></a>transition</h5>
+
+<pre><code>默认为"all 0.5s ease" 为slide的默认transition参数
+</code></pre>
 
 <hr>
 
@@ -322,17 +369,32 @@ Slide.on(<span class="pl-s"><span class="pl-pds">"</span>ppt-switchEnd<span clas
 <h5>
 <a id="easyslidestaticflayercls" class="anchor" href="#easyslidestaticflayercls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.STATIC.flayerCls</h5>
 
+<pre><code>默认为 EasySlide-flayer
+</code></pre>
+
 <h5>
 <a id="easyslidestaticflayertriggercls" class="anchor" href="#easyslidestaticflayertriggercls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.STATIC.flayerTriggerCls</h5>
+
+<pre><code>默认为 EasySlide-triggerLayer
+</code></pre>
 
 <h5>
 <a id="easyslidestaticanimatecls" class="anchor" href="#easyslidestaticanimatecls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.STATIC.animateCls</h5>
 
+<pre><code>默认为 EasySlide-animate
+</code></pre>
+
 <h5>
 <a id="easyslidestaticgroupcls" class="anchor" href="#easyslidestaticgroupcls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.STATIC.groupCls</h5>
 
+<pre><code>默认为 EasySlide-groups
+</code></pre>
+
 <h5>
 <a id="easyslidestaticslidecls" class="anchor" href="#easyslidestaticslidecls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.STATIC.slideCls</h5>
+
+<pre><code>默认为 EasySlide-slides
+</code></pre>
 
 <hr>
 
@@ -347,8 +409,14 @@ Slide.on(<span class="pl-s"><span class="pl-pds">"</span>ppt-switchEnd<span clas
 <h5>
 <a id="easyslidesubpptstaticslidecls" class="anchor" href="#easyslidesubpptstaticslidecls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.Subppt.STATIC.slideCls</h5>
 
+<pre><code>默认为 EasySlide-subppt-slide
+</code></pre>
+
 <h5>
 <a id="easyslidesubpptstaticimgwrapcls" class="anchor" href="#easyslidesubpptstaticimgwrapcls" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.Subppt.STATIC.imgWrapCls</h5>
+
+<pre><code>默认为 EasySlide-subppt-imgWrap
+</code></pre>
 
 <hr>
 
@@ -363,104 +431,139 @@ Slide.on(<span class="pl-s"><span class="pl-pds">"</span>ppt-switchEnd<span clas
 <h5>
 <a id="easyslideutils-1" class="anchor" href="#easyslideutils-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.$</h5>
 
-<pre><code>id选择器
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//id选择器 返回element</span>
+EasySlide.utils.$(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>)</pre></div>
 
 <h5>
 <a id="easyslideutilsgetbytagname" class="anchor" href="#easyslideutilsgetbytagname" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.getByTagName</h5>
 
-<pre><code>Tag选择器
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//Tag选择器 返回array类型的元素数组</span>
+<span class="pl-k">var</span> imgs <span class="pl-k">=</span> EasySlide.utils.getByTagName(<span class="pl-s"><span class="pl-pds">"</span>img<span class="pl-pds">"</span></span>);
+imgs.forEach(); <span class="pl-c">//可调用array方法</span></pre></div>
 
 <h5>
 <a id="easyslideutilsgetbyclsname" class="anchor" href="#easyslideutilsgetbyclsname" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.getByClsName</h5>
 
-<pre><code>ClassName选择器
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//ClassName选择器 返回array类型的元素数组</span>
+<span class="pl-k">var</span> eles <span class="pl-k">=</span> EasySlide.utils.getByTagName(<span class="pl-s"><span class="pl-pds">"</span>cls<span class="pl-pds">"</span></span>);
+eles.forEach(); <span class="pl-c">//可调用array方法</span></pre></div>
 
 <h5>
 <a id="easyslideutilsmakeelesarray" class="anchor" href="#easyslideutilsmakeelesarray" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.makeElesArray</h5>
 
-<pre><code>把类数组元素转换成数组元素
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">// 把类数组元素转换成数组元素 返回数组</span>
+EasySlide.utils.makeElesArray(arguments); <span class="pl-c">//可调用array方法</span></pre></div>
 
 <h5>
 <a id="easyslideutilsattr" class="anchor" href="#easyslideutilsattr" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.attr</h5>
 
-<pre><code>或者和设置属性方法
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//或者和设置属性方法</span>
+EasySlide.utils.attr(ele,<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>) <span class="pl-c">//返回key的val</span>
+EasySlide.utils.attr(ele,<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>) <span class="pl-c">//设置ele的key的属性为test</span></pre></div>
 
 <h5>
 <a id="easyslideutilsbind" class="anchor" href="#easyslideutilsbind" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.bind</h5>
 
-<pre><code>绑定DOM事件
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//绑定DOM事件</span>
+EasySlide.utils.bind(ele,<span class="pl-s"><span class="pl-pds">"</span>click<span class="pl-pds">"</span></span>,func);</pre></div>
 
 <h5>
 <a id="easyslideutilsunbind" class="anchor" href="#easyslideutilsunbind" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.unbind</h5>
 
-<pre><code>解绑DOM事件
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//解绑DOM事件</span>
+EasySlide.utils.unbind(ele,<span class="pl-s"><span class="pl-pds">"</span>click<span class="pl-pds">"</span></span>,func);</pre></div>
 
 <h5>
 <a id="easyslideutilsviewdate" class="anchor" href="#easyslideutilsviewdate" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.viewDate</h5>
 
-<pre><code>获取窗口视图信息
-</code></pre>
+<div class="highlight highlight-js"><pre>获取窗口视图信息
+EasySlide.utils.viewDate();
+<span class="pl-c">//返回值为</span>
+<span class="pl-c">/**</span>
+<span class="pl-c"> {</span>
+<span class="pl-c">    scrollTop:,</span>
+<span class="pl-c">    scrollLeft:,</span>
+<span class="pl-c">    documentWidth:,</span>
+<span class="pl-c">    documentHeight:,</span>
+<span class="pl-c">    viewWidth:,</span>
+<span class="pl-c">    viewHeight</span>
+<span class="pl-c"> };</span>
+<span class="pl-c">*/</span></pre></div>
 
 <h5>
 <a id="easyslideutilsremove" class="anchor" href="#easyslideutilsremove" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.remove</h5>
 
-<pre><code>删除DOM元素
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//删除DOM元素</span>
+EasySlide.utils.remove(ele) <span class="pl-c">//删除一个ele元素</span></pre></div>
 
 <h5>
 <a id="easyslideutilshide" class="anchor" href="#easyslideutilshide" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.hide</h5>
 
-<pre><code>隐藏DOM元素
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//隐藏DOM元素</span>
+EasySlide.utils.hide(ele);</pre></div>
 
 <h5>
 <a id="easyslideutilsshow" class="anchor" href="#easyslideutilsshow" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.show</h5>
 
-<pre><code>显示DOM元素
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//显示DOM元素</span>
+EasySlide.utils.show(ele);</pre></div>
 
 <h5>
 <a id="easyslideutilshasattr" class="anchor" href="#easyslideutilshasattr" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.hasAttr</h5>
 
-<pre><code>查看DOM元素是否有自定义属性
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//查看DOM元素是否有自定义属性</span>
+EasySlide.utils.hasAttr(ele,<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>) <span class="pl-c">// true , false</span></pre></div>
 
 <h5>
 <a id="easyslideutilscontain" class="anchor" href="#easyslideutilscontain" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.contain</h5>
 
-<pre><code>查看是否包含对应className的元素
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//查看是否包含对应className的元素</span>
+EasySlide.utils.contain(ele,<span class="pl-s"><span class="pl-pds">"</span>clsName<span class="pl-pds">"</span></span>); 
+<span class="pl-c">//返回false或者这个clsName元素</span></pre></div>
 
 <h5>
 <a id="easyslideutilsisweixin" class="anchor" href="#easyslideutilsisweixin" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.isWeixin</h5>
 
-<pre><code>检查是否是微信浏览器
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//检查是否是微信浏览器</span>
+EasySlide.utils.isWeixin() <span class="pl-c">//true false</span></pre></div>
 
 <h5>
 <a id="easyslideutilshasclass" class="anchor" href="#easyslideutilshasclass" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.hasClass</h5>
 
-<pre><code>检查是否包含对应cls
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//检查是否包含对应cls</span>
+EasySlide.utils.hasClass(ele,<span class="pl-s"><span class="pl-pds">"</span>clsName<span class="pl-pds">"</span></span>); <span class="pl-c">//true ,false</span></pre></div>
 
 <h5>
 <a id="easyslideutilsshareweibo" class="anchor" href="#easyslideutilsshareweibo" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.shareWeibo</h5>
 
-<pre><code>分享到微博
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//分享到微博</span>
+EasySlide.utils.shareWeibo({title<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>xxx<span class="pl-pds">"</span></span>,shareImg<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>xxx<span class="pl-pds">"</span></span>});</pre></div>
 
 <h5>
 <a id="easyslideutilsmixin" class="anchor" href="#easyslideutilsmixin" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.mixin</h5>
 
-<pre><code>属性拷贝方法
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="pl-c">//属性拷贝方法</span>
+EasySlide.utils.mixin({a<span class="pl-k">:</span><span class="pl-c1">0</span>,b<span class="pl-k">:</span><span class="pl-c1">1</span>},{a<span class="pl-k">:</span><span class="pl-c1">1</span>}) <span class="pl-c">//返回{a:1,b:1}</span></pre></div>
+
+<h5>
+<a id="easyslideutilsisarray" class="anchor" href="#easyslideutilsisarray" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.isArray</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//判断元素是否为数组</span>
+EasySlide.utils.isArray([]) <span class="pl-c">//true</span></pre></div>
+
+<h5>
+<a id="easyslideutilsisobject" class="anchor" href="#easyslideutilsisobject" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.isObject</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//判断元素是否为Object</span>
+EasySlide.utils.isObject({}) <span class="pl-c">//true</span></pre></div>
+
+<h5>
+<a id="easyslideutilstransitiondurationtomilliseconds" class="anchor" href="#easyslideutilstransitiondurationtomilliseconds" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasySlide.utils.transitionDurationToMilliseconds</h5>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">//转换duration为毫秒数</span>
+EasySlide.utils.transitionDurationToMilliseconds(<span class="pl-s"><span class="pl-pds">"</span>5s<span class="pl-pds">"</span></span>) <span class="pl-c">//5000</span>
+EasySlide.utils.transitionDurationToMilliseconds(<span class="pl-s"><span class="pl-pds">"</span>0.5s<span class="pl-pds">"</span></span>) <span class="pl-c">//500</span>
+EasySlide.utils.transitionDurationToMilliseconds(<span class="pl-s"><span class="pl-pds">"</span>50ms<span class="pl-pds">"</span></span>) <span class="pl-c">//50</span></pre></div>
 
 <hr>
 
