@@ -1,0 +1,6 @@
+*~
+*swp
+*.swp
+.gitCOMMIT_EDITMSG
+*.svn
+node_modules/*
