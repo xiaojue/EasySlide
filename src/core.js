@@ -160,6 +160,7 @@
     this.lastY = 0;
     this.scrollEle = null;
     this.scrollEleDire = null;
+    this.startTime = null;
     Events.call(this);
     this.bindSwipe(ele);
   };
@@ -189,21 +190,41 @@
       this.scrollEleDire = null;
       this.startX = this.lastX = e.touches[0].pageX;
       this.startY = this.lastY = e.touches[0].pageY;
+      this.startTime = Date.now();
     },
     _touchmove: function(e) {
       var scrollEle = this.isScrollContain(e.target);
-      this.lastX = e.touches[0].pageX;
-      this.lastY = e.touches[0].pageY;
+      var lastX = this.lastX = e.touches[0].pageX;
+      var lastY = this.lastY = e.touches[0].pageY;
+
+      if (e.touches && e.touches.length > 1) {
+        return false;
+      }
       if (scrollEle) {
         this.scrollEle = scrollEle;
         this.scrollEleDire = utils.attr(scrollEle, 'scroll');
         return false;
       }
       e.preventDefault();
-
-      if (e.touches && e.touches.length > 1) {
-        return false;
-      }
+      var startX = this.startX;
+      var startY = this.startY;
+      var absX = Math.abs(this.lastX - this.startX);
+      var absY = Math.abs(this.lastY - this.startY);
+      var moveTime = Date.now() - this.startTime;
+      this.trigger('swipeMove', [this.slides, {
+        moveTime: moveTime,
+        positive: {
+          x: lastX - startX >= 0 ? 1 : -1,
+          y: lastY - startY >= 0 ? 1 : -1
+        },
+        direc: absX > absY ? "X" : "Y",
+        moveX: absX,
+        moveY: absY,
+        startX: startX,
+        startY: startY,
+        lastX: lastX,
+        lastY: lastY
+      }, e.target]);
     },
     _touchend: function(e) {
 
@@ -213,8 +234,9 @@
       var absY = Math.abs(this.lastY - this.startY);
 
       var dragDirec = absX > absY ? "x" : "y";
+      var of = 5;
 
-      if ((dragDirec === "x" && absX < 30) || (dragDirec === "y" && absY < 30)) {
+      if ((dragDirec === "x" && absX < of) || (dragDirec === "y" && absY < of)) {
         return false;
       }
 
@@ -256,6 +278,7 @@
     this.subpptNum = []; //哪些slide是有左右滑动的子ppt的
 
     var defaultConfig = {
+      transition: 'all 0.5s ease',
       firstTime: true,
       animateEffect: 'default',
       swipeDirection: 'y',
@@ -280,7 +303,10 @@
   };
 
   EasySlide.animationEffects = {
-    'default': function(ele, axis, offsetEnd) {
+    'default': function(ele, axis, offsetEnd, setTransition) {
+      if (setTransition) {
+        ele.style.transition = this.transition;
+      }
       ele.style["-webkit-transform"] = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
     }
   };
@@ -311,9 +337,9 @@
       this.bindEvent();
 
       if (this.subpptObjects) {
-        if(!EasySlide.Subppt){
+        if (!EasySlide.Subppt) {
           throw new Error('must have ppt.js!');
-        }else{
+        } else {
           this.initSubPPT(this.subpptObjects);
         }
       }
@@ -330,10 +356,10 @@
       this.showCurSlide();
     },
     setYPos: function(el, posY) { //设置slide的竖直方向位置
-      EasySlide.animationEffects[this.animateEffect].call(this, el, 'Y', posY);
+      EasySlide.animationEffects[this.animateEffect].call(this, el, 'Y', posY, true);
     },
     setXPos: function(el, posX) { //设置slide的竖直方向位置
-      EasySlide.animationEffects[this.animateEffect].call(this, el, 'X', posX);
+      EasySlide.animationEffects[this.animateEffect].call(this, el, 'X', posX, true);
     },
     removeAnimation: function(el) {
       el.style['-webkit-animation'] = "";

@@ -8,7 +8,10 @@
     <title>EasySlide demo</title>
     <link href="reset.css" rel="stylesheet">
     <link href="../EasySlide.css" rel="stylesheet">
-    <script src="../EasySlide.js"></script>
+    <script src="../src/core.js"></script>
+    <script src="../src/loader.js"></script>
+    <script src="../src/ppt.js"></script>
+    <script src="../src/effects.js"></script>
     <style>
       .docTitle{
         margin-top:10%;
@@ -100,7 +103,6 @@
   </body>
   <script>
     var slide = new EasySlide({
-      animateEffect:"card",
       swipeDirection:'x',
       replay:true,
       width:300,
@@ -120,6 +122,27 @@
     });
     utils.bind(prev,'click',function(){
       slide.move(-1); 
+    });
+    //编写跟随手指移动的插件,只编写了default的例子
+    slide.on('swipeMove',function(slides,moves,target){
+      var self = slide;
+      var cur = slides[self.curIndex];
+      var prev = slides[self.curIndex - 1] || slides[slides.length - 1];
+      var next = slides[self.curIndex + 1] || slides[0];
+      var curLeft = 0;
+      var nextLeft = cur.clientWidth;
+      var prevLeft = - cur.clientWidth;
+      var moved = self.swipeDirection == 'x' ? moves.moveX * moves.positive.x : moves.moveY * moves.positive.y;
+      var subindex = self.subpptNum.indexOf(self.curIndex);
+      if (subindex !== -1 && utils.contain(target, EasySlide.Subppt.STATIC.imgWrapCls)) { //如果此页有子ppt
+        return;
+      }
+      cur.style.transition = 'all 0s';
+      next.style.transition = 'all 0s';
+      prev.style.transition = 'all 0s';
+      EasySlide.animationEffects['default'](cur,self.swipeDirection,moved+curLeft);
+      EasySlide.animationEffects['default'](prev,self.swipeDirection,moved+prevLeft);
+      EasySlide.animationEffects['default'](next,self.swipeDirection,moved+nextLeft);
     });
   </script>
 </html>
