@@ -107,15 +107,15 @@ var Slide = new EasySlide({});
 Slide.move(1) //-1 参数为1或者-1
 //移动当前页面至前后一页
 ```
-#### renderSlide
+##### renderSlide
 ```js
 动态修改过容器之后，可以调用此方法重新计算容器动画和元素个数。
 ```
-#### showCurSlide
+##### showCurSlide
 ```js
 可以调用此方法执行当前页切换动画
 ```
-#### getCurAllowSwipe
+##### getCurAllowSwipe
 ```js
 获取当前slide的可滑动状态
 ```
@@ -140,6 +140,8 @@ Slide.loader(["1.jpg","2.jpg"]);
 ```
 ##### swipeY
 ##### swipeX
+##### swipeMove
+##### swipeEnd
 ```js
 var Slide = new EasySlide({});
 Slide.on("swipeX",function(direction){
@@ -148,6 +150,16 @@ Slide.on("swipeX",function(direction){
 Slide.on("swipeY",function(direction){
 //direction为 1或者-1 代表方向
 });
+Slide.on("swipeMove",function(){
+//可以自己扩展移动时的动画，在demo中有体现用法
+});
+Slide.on("swipeEnd",function(){
+//在touchend时触发
+});
+```
+##### dragDirecNotEqual
+```js
+在滑动方向与默认方向相反时，touchEnd触发
 ```
 ##### slide-switchEnd
 ##### ppt-switchEnd
@@ -166,7 +178,6 @@ Slide.on("ppt-switchEnd",function(direction){
 #### 初始化参数配置
 
 -----
-
 ##### wrapAll
 ```js
 //必填，所有slides的父节点id
@@ -195,7 +206,14 @@ slide切换所使用的特效名称 默认 default, 可选:(card,rotate,flip,sca
 ```js
 slide滑动方向，默认为 "y"
 ```
-
+##### margin 
+```js
+选填默认0，制作多个slide共存在view中可用
+```
+##### transition
+```
+默认为"all 0.5s ease" 为slide的默认transition参数
+```
 -----
 
 #### animate参数配置
@@ -262,11 +280,25 @@ group所属顺序
 默认的EasySlide className储存位置，如果想自定义可以修改。
 ```
 ##### EasySlide.STATIC.flayerCls
+```
+默认为 EasySlide-flayer
+```
 ##### EasySlide.STATIC.flayerTriggerCls
+```
+默认为 EasySlide-triggerLayer
+```
 ##### EasySlide.STATIC.animateCls
+```
+默认为 EasySlide-animate
+```
 ##### EasySlide.STATIC.groupCls
+```
+默认为 EasySlide-groups
+```
 ##### EasySlide.STATIC.slideCls
-
+```
+默认为 EasySlide-slides
+```
 -----
 
 ##### EasySlide.Subppt.STATIC
@@ -276,8 +308,13 @@ group所属顺序
 -----
 
 ##### EasySlide.Subppt.STATIC.slideCls
+```
+默认为 EasySlide-subppt-slide
+```
 ##### EasySlide.Subppt.STATIC.imgWrapCls
-
+```
+默认为 EasySlide-subppt-imgWrap
+```
 -----
 
 ##### EasySlide.utils 
@@ -287,71 +324,120 @@ group所属顺序
 -----
 
 ##### EasySlide.utils.$
-```
-id选择器
+```js
+//id选择器 返回element
+EasySlide.utils.$("id")
 ```
 ##### EasySlide.utils.getByTagName
-```
-Tag选择器
+```js
+//Tag选择器 返回array类型的元素数组
+var imgs = EasySlide.utils.getByTagName("img");
+imgs.forEach(); //可调用array方法
 ```
 ##### EasySlide.utils.getByClsName
-```
-ClassName选择器
+```js
+//ClassName选择器 返回array类型的元素数组
+var eles = EasySlide.utils.getByTagName("cls");
+eles.forEach(); //可调用array方法
 ```
 ##### EasySlide.utils.makeElesArray
-```
-把类数组元素转换成数组元素
+```js
+// 把类数组元素转换成数组元素 返回数组
+EasySlide.utils.makeElesArray(arguments); //可调用array方法
 ```
 ##### EasySlide.utils.attr
-```
-或者和设置属性方法
+```js
+//或者和设置属性方法
+EasySlide.utils.attr(ele,"key") //返回key的val
+EasySlide.utils.attr(ele,"key","test") //设置ele的key的属性为test
 ```
 ##### EasySlide.utils.bind
-```
-绑定DOM事件
+```js
+//绑定DOM事件
+EasySlide.utils.bind(ele,"click",func);
 ```
 ##### EasySlide.utils.unbind
-```
-解绑DOM事件
+```js
+//解绑DOM事件
+EasySlide.utils.unbind(ele,"click",func);
 ```
 ##### EasySlide.utils.viewDate
-```
+```js
 获取窗口视图信息
+EasySlide.utils.viewDate();
+//返回值为
+/**
+ {
+    scrollTop:,
+    scrollLeft:,
+    documentWidth:,
+    documentHeight:,
+    viewWidth:,
+    viewHeight
+ };
+*/
 ```
 ##### EasySlide.utils.remove
-```
-删除DOM元素
+```js
+//删除DOM元素
+EasySlide.utils.remove(ele) //删除一个ele元素
 ```
 ##### EasySlide.utils.hide
-```
-隐藏DOM元素
+```js
+//隐藏DOM元素
+EasySlide.utils.hide(ele);
 ```
 ##### EasySlide.utils.show
-```
-显示DOM元素
+```js
+//显示DOM元素
+EasySlide.utils.show(ele);
 ```
 ##### EasySlide.utils.hasAttr
-```
-查看DOM元素是否有自定义属性
+```js
+//查看DOM元素是否有自定义属性
+EasySlide.utils.hasAttr(ele,"key") // true , false
 ```
 ##### EasySlide.utils.contain
-```
-查看是否包含对应className的元素
+```js
+//查看是否包含对应className的元素
+EasySlide.utils.contain(ele,"clsName"); 
+//返回false或者这个clsName元素
 ```
 ##### EasySlide.utils.isWeixin
-```
-检查是否是微信浏览器
+```js
+//检查是否是微信浏览器
+EasySlide.utils.isWeixin() //true false
 ```
 ##### EasySlide.utils.hasClass
-```
-检查是否包含对应cls
+```js
+//检查是否包含对应cls
+EasySlide.utils.hasClass(ele,"clsName"); //true ,false
 ```
 ##### EasySlide.utils.shareWeibo
-```
-分享到微博
+```js
+//分享到微博
+EasySlide.utils.shareWeibo({title:"xxx",shareImg:"xxx"});
 ```
 ##### EasySlide.utils.mixin
+```js
+//属性拷贝方法
+EasySlide.utils.mixin({a:0,b:1},{a:1}) //返回{a:1,b:1}
 ```
-属性拷贝方法
+##### EasySlide.utils.isArray
+```js
+//判断元素是否为数组
+EasySlide.utils.isArray([]) //true
+```
+##### EasySlide.utils.isObject
+```js
+//判断元素是否为Object
+EasySlide.utils.isObject({}) //true
+```
+##### EasySlide.utils.transitionDurationToMilliseconds
+```js
+//转换duration为毫秒数
+EasySlide.utils.transitionDurationToMilliseconds("5s") //5000
+EasySlide.utils.transitionDurationToMilliseconds("0.5s") //500
+EasySlide.utils.transitionDurationToMilliseconds("50ms") //50
 ```
 -----
