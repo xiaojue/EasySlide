@@ -1,3 +1,8 @@
+/**
+ * @author designsor@gmail.com
+ * @date 20150810
+ * @fileoverview 特效扩展
+ */
 (function(win) {
 
   var EasySlide = win.EasySlide;

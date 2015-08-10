@@ -1,4 +1,9 @@
-(function(win,doc){
+/**
+ * @author designsor@gmail.com
+ * @date 20150810
+ * @fileoverview 子ppt功能
+ */
+(function(win, doc) {
 
   var EasySlide = win.EasySlide;
 
@@ -224,6 +229,33 @@
 
   Subppt.prototype.initSlides = EasySlide.prototype.initSlides;
 
+  EasySlide.prototype.initSubPPT = function(subpptObjects) {
+    var self = this;
+
+    function initSub(index, subpptObj) {
+      self.subppt[index] = new EasySlide.Subppt({
+        width: self.vW,
+        height: self.vH,
+        wrapDiv: subpptObj.wrapDiv,
+        imgs: subpptObj.imgs
+      });
+      self.subpptNum.push(subpptObj.parentNum);
+    }
+
+    subpptObjects.forEach(function(subpptObj, index) {
+      var tTarget = utils.$(subpptObj.wrapDiv);
+      tTarget = utils.contain(tTarget, EasySlide.STATIC.flayerCls);
+      if (tTarget) {
+        var trigger = utils.$(utils.attr(tTarget, EasySlide.STATIC.flayerTriggerCls));
+        utils.bind(trigger, "click", function() {
+          initSub(index, subpptObj);
+        });
+      } else {
+        initSub(index, subpptObj);
+      }
+    });
+  };
+
   EasySlide.Subppt = Subppt;
 
-})(window,document);
+})(window, document);

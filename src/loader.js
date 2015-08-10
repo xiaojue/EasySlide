@@ -1,4 +1,9 @@
-(function(win,doc){
+/**
+ * @author designsor@gmail.com
+ * @date 20150810
+ * @fileoverview loader功能
+ */
+(function(win, doc) {
 
   var EasySlide = win.EasySlide;
 
@@ -20,9 +25,9 @@
     },
     getCreateNode: function(ext) {
       var types = {
-        img: ['jpg', 'jpeg', 'gif', 'png', 'bmp'],
-        video: ['webm', 'mp4'],
-        audio: ['ogg', 'wav', 'mp3', 'aac']
+        img: ['jpg', 'jpeg', 'gif', 'png', 'bmp']
+          //,video: ['webm', 'mp4'],
+          //audio: ['ogg', 'wav', 'mp3', 'aac']
       };
       for (var i in types) {
         if (types.hasOwnProperty(i) && types[i].indexOf(ext) > -1) {
@@ -56,9 +61,9 @@
       });
     },
     _fetch: function(res, cb) {
-      var self = this,
-        name = res.name,
-        path = res.path,
+      //var self = this,
+      //name = res.name,
+      var path = res.path,
         node = res.node;
       var Tag = doc.createElement(node);
       if (node === 'img') {
@@ -66,7 +71,10 @@
           utils.remove(Tag);
           cb();
         };
-      } else {
+      }
+      /*
+      else {
+        //TODO 加载音频视频功能在v2中开发
         utils.bind(Tag, 'canplaythrough', function() {
           if (node === 'video') {
             self.video[name] = Tag;
@@ -76,6 +84,7 @@
           cb();
         });
       }
+      */
       Tag.style.display = 'none';
       Tag.src = path;
       doc.body.appendChild(Tag);
@@ -104,13 +113,13 @@
     }
   };
 
-  var oldInit  = EasySlide.prototype.init;
+  var oldInit = EasySlide.prototype.init;
 
-  EasySlide.prototype.init = function(){
+  EasySlide.prototype.init = function() {
     loader.call(this);
     oldInit.call(this);
   };
 
   EasySlide.prototype = utils.mixin(EasySlide.prototype, loader.prototype);
 
-})(window,document);
+})(window, document);

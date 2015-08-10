@@ -1,6 +1,5 @@
 /*
- * @author zengshun 第一版
- * @author fuqiang3 第二版重构 -> 保留功能，全部优化+重新设计api
+ * @author designsor@gmail.com
  * @date 20150730
  * @fileoverview 统一h5动画效果工具,不依赖zepto，用于h5 case by case业务
  */
@@ -288,36 +287,6 @@
 
   EasySlide.prototype = {
     constructor: EasySlide,
-    initSubPPT: function(subpptObjects) {
-      var self = this;
-
-      if(!EasySlide.Subppt){
-        throw new Error('ppt.js must be have!'); 
-      }
-
-      function initSub(index, subpptObj) {
-        self.subppt[index] = new EasySlide.Subppt({
-          width: self.vW,
-          height: self.vH,
-          wrapDiv: subpptObj.wrapDiv,
-          imgs: subpptObj.imgs
-        });
-        self.subpptNum.push(subpptObj.parentNum);
-      }
-
-      subpptObjects.forEach(function(subpptObj, index) {
-        var tTarget = utils.$(subpptObj.wrapDiv);
-        tTarget = utils.contain(tTarget, EasySlide.STATIC.flayerCls);
-        if (tTarget) {
-          var trigger = utils.$(utils.attr(tTarget, EasySlide.STATIC.flayerTriggerCls));
-          utils.bind(trigger, "click", function() {
-            initSub(index, subpptObj);
-          });
-        } else {
-          initSub(index, subpptObj);
-        }
-      });
-    },
     bindEvent: function() {
       utils.bind(this.wrapAll, "click", this._click.bind(this));
       //绑在touchend上，操作才灵敏
@@ -342,7 +311,11 @@
       this.bindEvent();
 
       if (this.subpptObjects) {
-        this.initSubPPT(this.subpptObjects);
+        if(!EasySlide.Subppt){
+          throw new Error('must have ppt.js!');
+        }else{
+          this.initSubPPT(this.subpptObjects);
+        }
       }
 
     },
