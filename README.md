@@ -12,12 +12,11 @@ EasySlide 不基于任何框架。它是一个可以快速、独立的制作H5 M
 
 使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可，它还内置一些utils和动画效果，你也可以使用监听器和自己编写CSS类来扩展EasySlide.
 
+EasySlide独立分为4个js文件，如果你只需要基本功能，则只引用dist/EasySlide.js即可。
+
 ### Demo
-
-![EasySlide](demo/images/demo.gif)
-
-![EasySlide](demo/images/yoga.gif)
-
+<img width="200" height="300" src="https://raw.githubusercontent.com/xiaojue/EasySlide/master/demo/images/demo.gif" style="margin-right:10px;">
+<img with="250" height="300" src="https://raw.githubusercontent.com/xiaojue/EasySlide/master/demo/images/yoga.gif">
 ```
 gif图片较大，耐心等待刷出~，gif有丢帧，详细请clone本项目，打开demo文件夹查看，本地可运行。
 ```
@@ -31,8 +30,11 @@ gif图片较大，耐心等待刷出~，gif有丢帧，详细请clone本项目�
    <head>
        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
        <link href="reset.css" rel="stylesheet"> <!-- 或者你自己的reste css -->
-       <link href="../EasySlide.css" rel="stylesheet"> <!-- EasySlide所依赖的css -->
-       <script src="../EasySlide.js"></script> <!-- EasySlide所依赖的js -->
+       <link href="../dist/EasySlide.css" rel="stylesheet"> <!-- EasySlide所依赖的css -->
+       <script src="../dist/EasySlide.js"></script> <!-- EasySlide所依赖的js -->
+       <script src="../dist/loader.js"></script> 
+       <script src="../dist/ppt.js"></script> 
+       <script src="../dist/effects.js"></script> 
    </head>
    <body>
        <div class="EasySlide-warp" id="j_wrap">
@@ -93,7 +95,7 @@ new EasySlide({
 
 //调用loader方法可以实现预加载图片资源，并可以监听到loaded和progress两个事件
 ```
-#####goto
+##### goto
 ```js
 var Slide = new EasySlide({});
 Slide.goto(3);
@@ -105,7 +107,18 @@ var Slide = new EasySlide({});
 Slide.move(1) //-1 参数为1或者-1
 //移动当前页面至前后一页
 ```
-
+#### renderSlide
+```js
+动态修改过容器之后，可以调用此方法重新计算容器动画和元素个数。
+```
+#### showCurSlide
+```js
+可以调用此方法执行当前页切换动画
+```
+#### getCurAllowSwipe
+```js
+获取当前slide的可滑动状态
+```
 -----
 
 #### 事件
