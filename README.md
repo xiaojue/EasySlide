@@ -69,7 +69,7 @@ gif图片较大，耐心等待刷出~，gif有丢帧，详细请clone本项目�
           });
           
           //load对应图片资源
-          Slide.load(["images/1.jpg","images/2.jpg","..."]);
+          Slide.loader(["images/1.jpg","images/2.jpg","..."]);
        </script>
    </body>
 </html>
