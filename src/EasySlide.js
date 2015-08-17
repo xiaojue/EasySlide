@@ -462,7 +462,9 @@
     allowSwipe: function(direction, swipeDirection) {
       var allowswipe = this.getCurAllowSwipe(); //获得该针是否允许上下滑动
       if ((!allowswipe || allowswipe === "next" || allowswipe === 'prev') && this.swipeDirection === swipeDirection) {
-        this.move(direction);
+        if((allowswipe === 'next' && direction === 1) || (allowswipe === 'prev' && direction === -1)){
+          this.move(direction);
+        }
       }
     },
     move: function(direction) {
