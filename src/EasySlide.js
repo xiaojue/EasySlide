@@ -80,7 +80,8 @@
       return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
     },
     isWeixin: function() {
-      return UA.toLowerCase().match(/MicroMessenger/i) === "micromessenger" ? true : false;
+      var match = UA.toLowerCase().match(/MicroMessenger/i);
+      return match ? match[0]  === "micromessenger" : false;
     },
     shareWeibo: function(params) {
       var wbTitle = doc.title || params.title;
