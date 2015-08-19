@@ -365,11 +365,16 @@
       this.initSlides(this.wrapAll);
       this.showCurSlide();
     },
+    getEffects:function(el){
+      return utils.attr(el,'effect') || this.animationEffects;
+    },
     setYPos: function(el, posY) { //设置slide的竖直方向位置
-      EasySlide.animationEffects[this.animateEffect].call(this, el, 'Y', posY, true);
+      var effect = this.getEffects(el);
+      EasySlide.animationEffects[effect].call(this, el, 'Y', posY, true);
     },
     setXPos: function(el, posX) { //设置slide的竖直方向位置
-      EasySlide.animationEffects[this.animateEffect].call(this, el, 'X', posX, true);
+      var effect = this.getEffects(el);
+      EasySlide.animationEffects[effect].call(this, el, 'X', posX, true);
     },
     removeAnimation: function(el) {
       el.style['-webkit-animation'] = "";
