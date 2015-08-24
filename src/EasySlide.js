@@ -162,6 +162,7 @@
     this.scrollEle = null;
     this.scrollEleDire = null;
     this.startTime = null;
+    this.ele = ele;
     Events.call(this);
     this.bindSwipe(ele);
   };
@@ -206,19 +207,20 @@
         this.scrollEleDire = utils.attr(scrollEle, 'scroll');
         return false;
       }
-      e.preventDefault();
       var startX = this.startX;
       var startY = this.startY;
       var absX = Math.abs(this.lastX - this.startX);
       var absY = Math.abs(this.lastY - this.startY);
       var moveTime = Date.now() - this.startTime;
-      this.trigger('swipeMove', [this.slides, {
-        moveTime: moveTime,
-        positive: {
+      var direc = absX > absY ? "X" : "Y";
+      var positive = {
           x: lastX - startX >= 0 ? 1 : -1,
           y: lastY - startY >= 0 ? 1 : -1
-        },
-        direc: absX > absY ? "X" : "Y",
+      };
+      this.trigger('swipeMove', [this.slides, {
+        moveTime: moveTime,
+        positive: positive,
+        direc: direc,
         moveX: absX,
         moveY: absY,
         startX: startX,
@@ -226,6 +228,7 @@
         lastX: lastX,
         lastY: lastY
       }, e.target]);
+      e.preventDefault();
     },
     _touchend: function(e) {
 
@@ -366,7 +369,7 @@
       this.showCurSlide();
     },
     getEffects:function(el){
-      return utils.attr(el,'effect') || this.animationEffects;
+      return utils.attr(el,'effect') || this.animateEffect;
     },
     setYPos: function(el, posY) { //设置slide的竖直方向位置
       var effect = this.getEffects(el);
