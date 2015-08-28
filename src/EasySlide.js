@@ -315,7 +315,7 @@
   EasySlide.animationEffects = {
     'default': function(ele, axis, offsetEnd, setTransition) {
       if (setTransition) {
-        ele.style.transition = this.transition;
+        ele.style["-webkit-transition"] = this.transition;
       }
       ele.style["-webkit-transform"] = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
     }
