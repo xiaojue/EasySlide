@@ -233,7 +233,6 @@
     _touchend: function(e) {
 
       var target = e.target;
-
       var absX = Math.abs(this.lastX - this.startX);
       var absY = Math.abs(this.lastY - this.startY);
 
@@ -471,7 +470,7 @@
     allowSwipe: function(direction, swipeDirection) {
       var allowswipe = this.getCurAllowSwipe(); //获得该针是否允许上下滑动
       if ((!allowswipe || allowswipe === "next" || allowswipe === 'prev') && this.swipeDirection === swipeDirection) {
-        if((allowswipe === 'next' && direction === 1) || (allowswipe === 'prev' && direction === -1)){
+        if((allowswipe === 'next' && direction === 1) || (allowswipe === 'prev' && direction === -1) || allowswipe === null){
           this.move(direction);
         }
       }
