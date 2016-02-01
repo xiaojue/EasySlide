@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-transform"/> 
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <title>EasySlide demo</title>
+    <link href="reset.css" rel="stylesheet">
+    <link href="../dist/EasySlide.css" rel="stylesheet">
+    <script src="../src/EasySlide.js"></script>
+    <style>
+      body{
+        background:-webkit-gradient(linear,center top,center bottom,from(#888), to(#fff)); 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="EasySlide-warp" id="j_wrap">
+      <div index="0" class="EasySlide-slides">
+        <div class="EasySlide-groups docGroups" gindex="0">
+          <a href="javascript:;" id="musicBtn">音乐</a>
+        </div>
+      </div> 
+      <div index="1" class="EasySlide-slides">
+        <div class="EasySlide-groups docGroups" gindex="0">
+        </div>
+      </div> 
+    </div>
+  </body>
+  <script>
+    var h5 = new EasySlide({
+      replay:true,
+      wrapAll:'j_wrap',
+      backgroungMusic:'http://n.sinaimg.cn/hlj/bc8f498f/20160122/yq0KEVWXzUWAImFiABCr-Ja0K10180.mp3'
+    });
+    h5.setBgMusic();
+    var btn = EasySlide.utils.$('musicBtn');
+    EasySlide.utils.bind(btn,'click',function(){
+      h5.bgMusicSwitch();//自动判断开关
+      //h5.bgMusicPlay();
+      //h5.bgMusicPause();
+    });
+  </script>
+</html>
