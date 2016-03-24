@@ -271,7 +271,7 @@ group所属顺序
 ```
 ##### allowswipe
 ```
-当前slide是否允许被滑动，可设置next和prev，不设置为上下均可滑动。
+当前slide是否允许被滑动，可设置next和prev，不设置为上下均可滑动,设置在group节点上。
 ```
 -----
 
