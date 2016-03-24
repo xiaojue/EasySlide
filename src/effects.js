@@ -10,7 +10,10 @@
   var utils = EasySlide.utils;
 
   utils.mixin(EasySlide.animationEffects, {
-    'scale': function(ele, axis, offsetEnd) {
+    'scale': function(ele, axis, offsetEnd, setTransition) {
+      if (setTransition) {
+        ele.style["-webkit-transition"] = this.transition;
+      }
       var tIndex = parseInt(utils.attr(ele, 'index'), 10);
       var transform = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
       if (this.curIndex !== tIndex) {
@@ -18,7 +21,10 @@
       }
       ele.style["-webkit-transform"] = transform;
     },
-    'flip': function(ele, axis) {
+    'flip': function(ele, axis, offsetEnd, setTransition) {
+      if (setTransition) {
+        ele.style["-webkit-transition"] = this.transition;
+      }
       var rotateDirect = (axis === 'X') ? 'Y' : 'X';
       var tIndex = parseInt(utils.attr(ele, 'index'), 10);
       ele.style['-webkit-backface-visibility'] = 'hidden';
@@ -49,7 +55,10 @@
       }, duration);
     },
     //x 效果好
-    'rotate': function(ele, axis, offsetEnd) {
+    'rotate': function(ele, axis, offsetEnd, setTransition) {
+      if (setTransition) {
+        ele.style["-webkit-transition"] = this.transition;
+      }
       var rotateDirect = (axis === 'X') ? 'Y' : 'X';
       var tIndex = parseInt(utils.attr(ele, 'index'), 10);
       var scale = axis === 'X' ? this.vW : this.vH;
@@ -68,7 +77,10 @@
         ele.style['-webkit-transform'] = 'rotate' + rotateDirect + '(' + 90 * index + 'deg) translateZ(' + (0.888 * scale / 2) + 'px) translate' + axis + '(' + offsetEnd + 'px) scale(0.888)';
       }
     },
-    'card': function(ele, axis, offsetEnd) {
+    'card': function(ele, axis, offsetEnd, setTransition) {
+      if (setTransition) {
+        ele.style["-webkit-transition"] = this.transition;
+      }
       var tIndex = parseInt(utils.attr(ele, 'index'), 10);
       var transform = 'translateZ(0) translate' + axis + '(' + offsetEnd + 'px)';
       var duration = window.getComputedStyle(ele, null)['transition-duration'];

@@ -153,7 +153,7 @@ div#loading{margin:15px auto 0;}
     </div>
   </div>
   <div id="frame1" index="1" class="EasySlide-slides slides">
-    <div class="EasySlide-groups groups" gIndex="0">
+    <div class="EasySlide-groups groups" gIndex="0" allowswipe="no">
       <div class="img10 EasySlide-animate goto" in="zoomIn" delay=".5s" goto="2"><div></div></div>
       <div class="img11 EasySlide-animate goto" in="zoomIn" delay="1s" goto="3"><div></div></div>
       <div class="img12 EasySlide-animate goto" in="zoomIn" delay="1.5s" goto="4"><div></div></div>
@@ -308,6 +308,7 @@ div#loading{margin:15px auto 0;}
   });
 
   page.on('slide-switchEnd',function(allowswipe){
+    console.log(allowswipe);
     if (allowswipe === "no" || allowswipe === "prev") {
       utils.hide(arrow);
     } else {
