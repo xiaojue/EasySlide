@@ -1,114 +1,126 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-transform"/> 
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
-    <title>EasySlide demo</title>
-    <link href="reset.css" rel="stylesheet">
-    <link href="../dist/EasySlide.css" rel="stylesheet">
-    <script src="../dist/EasySlide.js"></script>
-    <script src="../dist/ppt.js"></script>
-    <style>
-      body{
-        background:-webkit-gradient(linear,center top,center bottom,from(#888), to(#fff)); 
-      }
-      .docTitle{
-        margin-top:10%;
-        margin-bottom:10%;
-        text-align:center; 
-      }
-      .docNav{
-        list-style:initial;
-        border-top:#000 solid 1px;
-        border-bottom:#000 solid 1px;
-        padding:10px 10px 10px 20px;
-        line-height:300%;
-        margin:10% auto;
-        width:200px;
-      }
-      .docGroups p{
-        text-align:center; 
-        margin-bottom:10px;
-      }
-      .docText{
-        margin:0 auto;
-        width:80%; 
-        line-height:200%;
-        height:320px;
-        overflow-y:auto;
-      }
-      .docText p{
-        text-indent:20px;
-        text-align:left;
-        margin-bottom:10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="EasySlide-warp" id="j_wrap">
-      <div index="0" class="EasySlide-slides">
-        <div class="EasySlide-groups docGroups" gindex="0">
-          <div style="position:absolute;width:100%;top:18%;left:0;" id="j_ppt"></div>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+  <title>EasySlide demo</title>
+  <link href="reset.css" rel="stylesheet">
+  <link href="../dist/EasySlide.css" rel="stylesheet">
+  <script src="../dist/EasySlide.js"></script>
+  <script src="../dist/ppt.js"></script>
+  <style>
+    body {
+      background: rgb(2, 0, 36);
+      background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    }
+
+    .docTitle {
+      margin-top: 10%;
+      margin-bottom: 10%;
+      text-align: center;
+    }
+
+    .docNav {
+      list-style: initial;
+      border-top: #000 solid 1px;
+      border-bottom: #000 solid 1px;
+      padding: 10px 10px 10px 20px;
+      line-height: 300%;
+      margin: 10% auto;
+      width: 200px;
+    }
+
+    .docGroups p {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .docText {
+      margin: 0 auto;
+      width: 80%;
+      line-height: 200%;
+      height: 320px;
+      overflow-y: auto;
+    }
+
+    .docText p {
+      text-indent: 20px;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="EasySlide-warp" id="j_wrap">
+    <div index="0" class="EasySlide-slides">
+      <div class="EasySlide-groups docGroups" gindex="0">
+        <div style="position:absolute;width:100%;top:18%;left:0;" id="j_ppt"></div>
+      </div>
+    </div>
+    <div index="1" class="EasySlide-slides">
+      <div class="EasySlide-groups docGroups" gindex="0">
+        <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">EasySlide</h1>
+        <ol delay="1s" duration=".5s" in="fadeInDown" class="EasySlide-animate docNav">
+          <li goto="2">什么是EasySlide?</li>
+          <li goto="3">快速上手.</li>
+          <li goto="4">下载使用.</li>
+        </ol>
+        <p delay="1.5s" in="fadeInUp" class="EasySlide-animate">项目主页</p>
+        <p delay="2s" in="zoomIn" class="EasySlide-animate"><a href="http://github.com/xiaojue/EasySlide"
+            target="_blank">http://github.com/xiaojue/EasySlide</a></p>
+      </div>
+    </div>
+    <div index="2" class="EasySlide-slides">
+      <div class="EasySlide-groups docGroups" gindex="0">
+        <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">什么是EasySlide?</h1>
+        <div delay="1.3s" in="fadeIn" class="EasySlide-animate docText" scroll="y">
+          <p>
+            不基于任何框架、快速、独立的制作H5 Mobile页面的框架。它包含资源loader，页面切换功能，子类PPT功能，内部页面跳转功能，page overlay功能，自定义动画效果和扩展动画效果等功能。
+          </p>
+          <p>
+            使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可。
+          </p>
+          <p>
+            内置一些utils和动画效果，你也可以使用监听器和自己编写CSS类来扩展EasySlide.
+          </p>
         </div>
       </div>
-      <div index="1" class="EasySlide-slides">
-        <div class="EasySlide-groups docGroups" gindex="0">
-          <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">EasySlide</h1>
-          <ol delay="1s" duration=".5s"  in="fadeInDown" class="EasySlide-animate docNav">
-            <li goto="2">什么是EasySlide?</li>
-            <li goto="3">快速上手.</li>
-            <li goto="4">下载使用.</li>
-          </ol>
-          <p delay="1.5s" in="fadeInUp" class="EasySlide-animate">项目主页</p>
-          <p delay="2s" in="zoomIn" class="EasySlide-animate"><a href="http://github.com/xiaojue/EasySlide" target="_blank">http://github.com/xiaojue/EasySlide</a></p>
-        </div>
-      </div> 
-      <div index="2" class="EasySlide-slides">
-        <div class="EasySlide-groups docGroups" gindex="0">
-          <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">什么是EasySlide?</h1>
-          <div delay="1.3s" in="fadeIn" class="EasySlide-animate docText" scroll="y">
-            <p>
-            不基于任何框架、快速、独立的制作H5 Mobile页面的框架。它包含资源loader，页面切换功能，子类PPT功能，内部页面跳转功能，page overlay功能，自定义动画效果和扩展动画效果等功能。
-            </p>
-            <p>
-            使用EasySlide，可以不再使用javascript来设置动画顺序与效果，而只需要编写对应的动画类和设置HTML节点信息即可。
-            </p>
-            <p>
-            内置一些utils和动画效果，你也可以使用监听器和自己编写CSS类来扩展EasySlide.
-            </p>
-          </div>
-        </div>
-      </div> 
-      <div index="3" class="EasySlide-slides">
-        <div class="EasySlide-groups docGroups" gindex="0">
-          <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">快速上手.</h1>
-          <div delay="1.3s" in="fadeIn" class="EasySlide-animate docText">
-            <p>
-              引用好所需得JS和CSS文件，之后调用对应方法即可，如果不需要扩展，则只需要编写HTML部分即可，更多参见项目详细README.
-            </p>
-          </div>
-        </div>
-      </div> 
-      <div index="4" class="EasySlide-slides">
-        <div class="EasySlide-groups docGroups" gindex="0">
-          <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">下载使用.</h1>
-          <p delay="1.5s" in="fadeInUp" class="EasySlide-animate">项目主页</p>
-          <p delay="2s" in="zoomIn" class="EasySlide-animate"><a href="http://github.com/xiaojue/EasySlide" target="_blank">http://github.com/xiaojue/EasySlide</a></p>
-        </div>
-      </div> 
     </div>
-  </body>
-  <script>
-    new EasySlide({
-      replay:true,
-      subpptObjects:[{
-        wrapDiv:"j_ppt",
-        imgs:["images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg","images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg"],
-        parentNum:0
-      }],
-      wrapAll:'j_wrap'
-    }); 
-  </script>
+    <div index="3" class="EasySlide-slides">
+      <div class="EasySlide-groups docGroups" gindex="0">
+        <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">快速上手.</h1>
+        <div delay="1.3s" in="fadeIn" class="EasySlide-animate docText">
+          <p>
+            引用好所需得JS和CSS文件，之后调用对应方法即可，如果不需要扩展，则只需要编写HTML部分即可，更多参见项目详细README.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div index="4" class="EasySlide-slides">
+      <div class="EasySlide-groups docGroups" gindex="0">
+        <h1 delay=".5s" duration="1s" in="zoomIn" class="EasySlide-animate docTitle">下载使用.</h1>
+        <p delay="1.5s" in="fadeInUp" class="EasySlide-animate">项目主页</p>
+        <p delay="2s" in="zoomIn" class="EasySlide-animate"><a href="http://github.com/xiaojue/EasySlide"
+            target="_blank">http://github.com/xiaojue/EasySlide</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  new EasySlide({
+    replay: true,
+    subpptObjects: [{
+      wrapDiv: "j_ppt",
+      imgs: ["images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg", "images/desktop/1.jpg", "images/desktop/2.jpg", "images/desktop/3.jpg", "images/desktop/4.jpg", "images/desktop/5.jpg"],
+      parentNum: 0
+    }],
+    wrapAll: 'j_wrap'
+  }); 
+</script>
+
 </html>
